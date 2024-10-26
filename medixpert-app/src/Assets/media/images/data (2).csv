@@ -1,0 +1,6 @@
+masterType,itemName,genericName,itemType,itemCategory,qtyUnit,reorderQty,risk,riskColor,comments,isDrug,remarks
+Medicine,Dolo 500,Paracetamol,Alcohol,Aspirine,Number,100,Normal,green,,,[object Object]
+Medicine,Zymol,Paracetamol,Tablet,Pain Killer,Strip,12,High,Red,,,[object Object],[object Object]
+General,Pen,Pencil,Injection,Pain Killer,Mg,11,Normal,green,,,
+General,car,,Alcohol,Aspirine,Number,23,Medium,orange,,,[object Object]
+Medicine,sdf,sdfxcv,Alcohol,Aspirine,Number,34,Normal,green,,,[object Object],[object Object],[object Object],[object Object]

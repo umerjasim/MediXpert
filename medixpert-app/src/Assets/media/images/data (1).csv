@@ -1,0 +1,6 @@
+key,masterType,itemName,genericName,itemType,itemCategory,qtyUnit,reorderQty,risk,riskColor,comments,isDrug,remarks
+6708219f20473aa293e5a2df,Medicine,Dolo 500,Paracetamol,Alcohol,Aspirine,Number,100,Normal,green,,,[object Object]
+6708cfa0f18b868f38996f41,Medicine,Zymol,Paracetamol,Tablet,Pain Killer,Strip,12,High,Red,,,[object Object],[object Object]
+6708fab42b95684e6f8ffff5,General,Pen,Pencil,Injection,Pain Killer,Mg,11,Normal,green,,,
+670907d12b95684e6f8ffff7,General,car,,Alcohol,Aspirine,Number,23,Medium,orange,,,[object Object]
+6709142cbadf444182540015,Medicine,sdf,sdfxcv,Alcohol,Aspirine,Number,34,Normal,green,,,[object Object],[object Object],[object Object],[object Object]
