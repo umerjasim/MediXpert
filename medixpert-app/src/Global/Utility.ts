@@ -333,6 +333,14 @@ class Utility {
     };
   }
 
+  capitalizeWords(text: string) {
+    if (text) {
+      return text.replace(/\b\w/g, char => char.toUpperCase());
+    } else {
+      return '';
+    }
+  }
+
 }
 
 export default new Utility();

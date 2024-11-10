@@ -6,7 +6,9 @@ const Routes = {
     items:'/general/items',
     suppliers:'/general/suppliers',
     taxes:'/masters/taxes',
-    purchaseEntry:'/transactions/purchase-entry'
+    purchaseEntry:'/transactions/purchase-entry',
+    approvePurchaseEntry:'/transactions/approve-purchase-entry',
+    sale:'/transactions/sale',
   };
   
   export default Routes;

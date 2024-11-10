@@ -204,7 +204,7 @@ function Suppliers() {
                     ellipsis: true,
                 },
                 {
-                    title: t('mobileNoText'),
+                    title: t('mobileNumberText'),
                     dataIndex: 'mobile',
                     key: 'mobile',
                     sorter: (a, b) => {

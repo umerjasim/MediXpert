@@ -13,11 +13,12 @@ class PurchaseEntryStore {
     suppliers = [];
     purchaseFormTypes: PurchaseFormTypes[] = [];
     purchaseTypes = [];
+    approvePurchaseEntryData = [];
+    purchaseEntryItems = [];
 
     getMasterData = async () => {
         try {
             const response: any = await purchaseEntryService.getMasterData();
-            ;
             if (response && response?.data) {
                 runInAction(() => {
                     this.items = response?.data?.items;
@@ -39,12 +40,49 @@ class PurchaseEntryStore {
     addPurchaseEntry = async (data: any) => {
         try {
           const response: any = await purchaseEntryService.addPurchaseEntry(data);
-          console.log(data)
           if (response) {
             return Promise.resolve(response);
           }
         } catch (error : any) {
-            console.log(error)
+            return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
+        }
+    }
+
+    getApprovePurchaseEntry = async (dateRange: any) => {
+        try {
+            const response: any = await purchaseEntryService.getApprovePurchaseEntry(dateRange);
+            if (response && response?.data) {
+                runInAction(() => {
+                    this.approvePurchaseEntryData = response?.data?.approvePurchaseEntry;
+                });
+                return Promise.resolve(null);
+            }
+        } catch (error: any) {
+            return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
+        }
+    }
+
+    approvePurchaseEntry = async (data: any) => {
+        try {
+          const response: any = await purchaseEntryService.approvePurchaseEntry(data);
+          if (response) {
+            return Promise.resolve(response);
+          }
+        } catch (error : any) {
+            return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
+        }
+    }
+
+    getPurchaseEntryItems = async (id: any) => {
+        try {
+            const response: any = await purchaseEntryService.getPurchaseEntryItems(id);
+            if (response && response?.data) {
+                runInAction(() => {
+                    this.purchaseEntryItems = response?.data?.purchaseEntryItems;
+                });
+                return Promise.resolve(null);
+            }
+        } catch (error: any) {
             return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
         }
     }

@@ -8,6 +8,7 @@ import { google } from 'googleapis';
 const { OAuth2 } = google.auth;
 import nodemailer from 'nodemailer';
 import axios from 'axios';
+import moment from 'moment';
 
 const generateRandomPassword = (length: number): string => {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -231,8 +232,25 @@ export async function sendMailUsingConventionalWay(
     });
 };
 
+function parseDate(
+  date: string | undefined, 
+  format: string = 'DD-MM-YYYY', 
+  isStartOfDay: boolean = true
+): Date | undefined {
+  if (!date) return undefined;
+
+  const parsedDate = moment.utc(date, format, true);
+
+  if (!parsedDate.isValid()) return undefined;
+
+  return isStartOfDay
+    ? parsedDate.startOf('day').toDate()
+    : parsedDate.endOf('day').toDate();
+}
+
 export { 
     generateRandomPassword,
     encrypt,
-    decrypt
+    decrypt,
+    parseDate
 };

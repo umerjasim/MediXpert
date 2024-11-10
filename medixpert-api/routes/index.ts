@@ -4,6 +4,7 @@ import itemRoute from './item.routes';
 import loginRoute from './login.routes';
 import outletRoute from './outlet.routes';
 import purchaseEnryRoute from './purchaseEntry.routes';
+import saleRoute from './sale.routes';
 import supplierRoute from './supplier.routes';
 import taxRoute from './tax.routes';
 import userRoute from './user.routes';
@@ -18,6 +19,7 @@ const routes = (app: any) => {
   app.use('/tax', taxRoute);
   app.use('/outlet', outletRoute);
   app.use('/purchase-entry', purchaseEnryRoute);
+  app.use('/sale', saleRoute);
 };
 
 export default routes;

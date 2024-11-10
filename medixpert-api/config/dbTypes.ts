@@ -620,6 +620,7 @@ export type PurchaseEntryAmounts = {
     extraDiscount: number;
     totalTaxAmount: number;
     totalAmount: number;
+    totalMrp: number;
     roundOff: number;
     netInvoiceAmount: number;
     taxSplit: any[] | null;
@@ -643,6 +644,7 @@ export type PurchaseEntryItems = {
     itemId: ObjectId;
     manufacturerId: ObjectId;
     hsnNo: string;
+    batchNo: string;
     rackNo: string;
     expiry: Date;
     pack: number;
@@ -712,17 +714,30 @@ export type Manufacturers = {
 export type ItemsStock = {
     _id: ObjectId;
     purchaseId: ObjectId;
+    transferId: ObjectId | null;
     itemId: ObjectId;
     branchId: ObjectId;
     outletId: ObjectId;
-    stock: number;
-    transferId: ObjectId | null;
-    isFree: boolean;
-    price: {
-        itemCost: number,
-        itemPrice: number,
-        itemMRP: number
-    },
+    hsnNo: string;
+    batchNo: string;
+    rackNo: string;
+    expiry: Date | null;
+    pack: number;
+    packUnitId: ObjectId;
+    qty: number;
+    freeQty: number;
+    totalFreeQty: number;
+    rate: number;
+    totalCost: number;
+    costPerQty: number;
+    totalQty: number;
+    mrp: number;
+    mrpPerQty: number;
+    discount: string;
+    discountAmount: number;
+    totalAmount: number;
+    margin: number;
+    ptr: number;
     tax: {
         taxId: ObjectId,
         taxType: string,
@@ -730,6 +745,13 @@ export type ItemsStock = {
         inclusive: boolean,
         subTaxes: [] | null,
     },
+    taxForFree: {
+        taxId: ObjectId,
+        taxType: string,
+        taxValue: number,
+        inclusive: boolean,
+        subTaxes: [] | null,
+    } | null,
     active: boolean;
     created: {
         by: ObjectId | 'system';

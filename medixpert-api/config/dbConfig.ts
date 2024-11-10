@@ -17,7 +17,7 @@ if (!db) {
 
 const client = new MongoClient(url);
 
-export async function connectToDatabase() {
+export async function connectToDatabase(): Promise<Db> {
     try {
         await client.connect();
         // console.log('Connected to MongoDB');

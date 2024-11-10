@@ -452,16 +452,16 @@ function Items() {
             await itemStore.addItem(values);
             await getItems();
             Notification.success({
-                description: t('success'),
-                message: t('savedSuccessfully')
+                message: t('success'),
+                description: t('savedSuccessfully')
             });
             setTimeout(() => {
                 setAddModalOpen(false);
             }, 500);
         } catch (error) {
             Notification.error({
-                description: t('error'),
-                message: t('defaultErrorMessage')
+                message: t('error'),
+                description: t('defaultErrorMessage')
             });
         } finally {
             setTimeout(() => {

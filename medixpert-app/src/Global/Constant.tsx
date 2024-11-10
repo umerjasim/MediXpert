@@ -1,4 +1,6 @@
+import { InputNumber, TimeRangePickerProps } from 'antd';
 import { GB, IN } from 'country-flag-icons/react/3x2';
+import dayjs from 'dayjs';
 
 const Constant = {
     appName: 'MediXpert',
@@ -29,6 +31,11 @@ const Constant = {
             discount: 2,
             tax: 2,
             netInvoice: 0
+        },
+        sale: {
+            amount: 2,
+            tax: 2,
+            discount: 2
         }
     },
 
@@ -37,9 +44,17 @@ const Constant = {
     currencySymbol: '₹',
     currencyShort: 'Rs',
     currencyForBill: {
-        integer: 'Rupee(s)',
-        fractional: 'Paisa'
+        name: 'Rupee',
+        plural: 'Rupees',
+        fractionalUnit: {
+            name: 'Paisa',
+            plural: 'Paise'
+        },
     },
+
+    country: 'India',
+    countryCode: 'IN',
+    countryDialCode: '+91',
 
     userAccess: {
         user: 1,
@@ -57,8 +72,8 @@ const Constant = {
     },
 
     languageList: [
-        { key: 
-            'lang-en', 
+        { 
+            key: 'lang-en', 
             value: 'en', 
             label: <><span style={{ marginRight: '8px' }}><GB width="15" /></span>English</>, 
             flag: <GB width="15" /> 

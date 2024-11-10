@@ -180,7 +180,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
                     <Form.Item
                     label={
                     <>
-                    {t('mobileNoText')}
+                    {t('mobileNumberText')}
                     <Tooltip placement="right" title={t('mobileNoTooltipText')}>
                         <InfoCircleOutlined
                         style={{ marginLeft: 8 }} />
@@ -198,7 +198,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
                     >
                         <InputNumber max={9999999999} maxLength={10}
                         style={{ width: '100%' }}
-                        placeholder={t('mobileNoText')} />
+                        placeholder={t('mobileNumberText')} />
                     </Form.Item>
                 </Col>
                 <Col lg={12} md={12} sm={12} xs={12}>

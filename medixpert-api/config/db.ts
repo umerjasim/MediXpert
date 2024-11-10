@@ -153,6 +153,21 @@ async function initializeDB() {
     }
     await insertPage(collectionNames?.subPages, pageData);
 
+    pageData = {
+        mainPageId: transactionId,
+        name: 'Approve Purchase Entry',
+        title: 'Approve Purchase Entry',
+        route: '/approve-purchase-entry',
+        icon: 'FileDoneOutlined',
+        active: true,
+        created: {
+            by: 'system',
+            on: new Date().toLocaleString(),
+            date: new Date
+        }
+    }
+    await insertPage(collectionNames?.subPages, pageData);
+
   } catch (error) {
     console.error('Error initializing pages:', error);
     logger.error(error?.stack);

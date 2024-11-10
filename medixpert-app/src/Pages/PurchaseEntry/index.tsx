@@ -180,7 +180,8 @@ function PurchaseEntry() {
         netInvoiceAmount: 0,
         totalTaxAmount: 0,
         totalAfterDiscount: 0,
-        totalBeforeDiscount: 0
+        totalBeforeDiscount: 0,
+        totalMrp: 0
     });
     const [selectedTaxIds, setSelectedTaxIds] = useState<string[]>([]);
     const [selectedTaxes, setSelectedTaxes] = useState<any[]>([]);
@@ -188,7 +189,10 @@ function PurchaseEntry() {
     const [expiryWarn, setExpiryWarn] = useState<boolean[]>([]);
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [uploadedFiles, setUploadedFiles] = useState<any[]>();
-    const [grnNo, setGrnNo] = useState(null);
+    const [grn, setGrn] = useState({
+        no: null,
+        copy: false
+    });
 
     const { i18n } = useTranslation();
     useEffect(() => {
@@ -222,6 +226,7 @@ function PurchaseEntry() {
             'purchase-entry-round-off': totalValues.roundOff,
             'purchase-entry-net-invoice-amount': totalValues.netInvoiceAmount,
             'purchase-entry-total-tax-amount': totalValues.totalTaxAmount,
+            'purchase-entry-total-mrp': totalValues.totalMrp,
         };
         // selectedTaxes.forEach((tax, index) => {
         //     fieldsToUpdate[`purchase-entry-amount-for-tax-${index}`] = 0;
@@ -886,6 +891,7 @@ function PurchaseEntry() {
         let taxAmounts: { [key: string]: number } = {};
         let taxableAmountsPerRate: { [key: string]: number } = {};
         let totalDiscount = 0;
+        let totalMrp = 0;
     
         updatedData.forEach((data: any) => {
             const amount = data?.totalAmount || 0;
@@ -893,6 +899,8 @@ function PurchaseEntry() {
             const taxEntry = masterData?.taxes?.find(tax => tax._id === taxRateId);
             const taxRate = taxEntry ? taxEntry.value : 0;
             const discount = data?.discountAmount || 0;
+            const mrp = data?.mrp || 0;
+            const qty = data?.qty || 0;
 
             if (taxRate > 0) {
                 if (taxInclusive) {
@@ -930,6 +938,7 @@ function PurchaseEntry() {
                 nonTaxableSum += amount;
             }
             totalDiscount += discount;
+            totalMrp += (mrp * qty);
         });
 
         const totalSum = taxableSum + nonTaxableSum;
@@ -946,6 +955,10 @@ function PurchaseEntry() {
             (totalSum + totalTax), 
             Constant.roundOffs.purchaseEntry.netInvoice
         );
+
+        totalMrp = Math.round(totalMrp * 
+            Math.pow(10, Constant.roundOffs.purchaseEntry.mrp))
+            / Math.pow(10, Constant.roundOffs.purchaseEntry.mrp);
         
         setTotalValues((prevValues) => ({
             ...prevValues,
@@ -955,7 +968,8 @@ function PurchaseEntry() {
             addedDiscount: totalDiscount,
             netInvoiceAmount: roundedValue,
             roundOff: roundoffValue,
-            totalTaxAmount: totalTax
+            totalTaxAmount: totalTax,
+            totalMrp: totalMrp
         }));
 
         form2.setFieldsValue({
@@ -966,6 +980,7 @@ function PurchaseEntry() {
             'purchase-entry-net-invoice-amount': roundedValue,
             'purchase-entry-round-off': roundoffValue,
             'purchase-entry-total-tax-amount': totalTax,
+            'purchase-entry-total-mrp': totalMrp,
         });
 
         if (totalSum || totalSum === 0) {
@@ -1134,7 +1149,7 @@ function PurchaseEntry() {
                 } else {
                     const form2Values = await form2.validateFields();
                     const result = await purchaseEntryStore.addPurchaseEntry({form1Values, resultData, form2Values});
-                    setGrnNo(result?.data?.grn);
+                    setGrn({ no : result?.data?.grn, copy: false });
                     await form1.resetFields();
                     await form2.resetFields();
                     const newData: DataType = {
@@ -1708,6 +1723,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.rate !== undefined ? 
                                     resultData[index].rate : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                             />
                         </div>
                         <span id={`error-rate-${index}`}
@@ -1747,6 +1763,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.totalCost !== undefined ? 
                                     resultData[index].totalCost : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                             />
                         </div>
                         <span id={`error-totalCost-${index}`}
@@ -1786,6 +1803,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.costPerQty !== undefined ? 
                                     resultData[index].costPerQty : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                             />
                         </div>
                         <span id={`error-costPerQty-${index}`}
@@ -1824,6 +1842,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.mrp !== undefined ? 
                                     resultData[index].mrp : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                             />
                         </div>
                         <span id={`error-mrp-${index}`}
@@ -1863,6 +1882,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.mrpPerQty !== undefined ? 
                                     resultData[index].mrpPerQty : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                             />
                         </div>
                         <span id={`error-mrpPerQty-${index}`}
@@ -1975,6 +1995,7 @@ function PurchaseEntry() {
                                 }}
                                 value={resultData[index]?.totalAmount !== undefined ? 
                                     resultData[index].totalAmount : undefined}
+                                prefix={Constant.currencySymbol || Constant.currencyShort}
                                 />
                         </div>
                         <span id={`error-totalAmount-${index}`}
@@ -2292,20 +2313,43 @@ function PurchaseEntry() {
     return (
         <>
             <Card>
-            <Modal title={t('grnNoText')}
-                // open={grnNo ? true : false} 
-                open={false}
-                onOk={()=> setGrnNo(null)}
-            >
-                {/* <p>{grnNo}</p> */}
-                <p>
-                    <span style={{ marginRight: 10 }}>GRN242500000001</span>
-                    <Button size="small"
-                    icon={<CopyOutlined />}
-                    type="text"
-                    />
-                </p>
-            </Modal>
+                <Modal title={t('grnNumberText')}
+                    open={grn.no ? true : false}
+                    footer={[
+                        <Button key="ok" type="primary" onClick={()=> setGrn({ ...grn, no: null })}>
+                            OK
+                        </Button>
+                    ]}
+                >
+                    <div style={{ paddingTop: '10px' }}>
+                        <Space.Compact style={{ width: '100%' }}>
+                            <Input defaultValue={grn?.no || undefined} 
+                            disabled />
+                            <Tooltip title={t('copyText')} >
+                                <Button
+                                icon={<CopyOutlined />}
+                                onClick={()=> {
+                                    navigator.clipboard.writeText(grn?.no || '12').then(() => {
+                                        setGrn({ ...grn, copy: true });
+                                        setTimeout(() => {
+                                            setGrn({ ...grn, copy: false });
+                                        }, 3000);
+                                    });
+                                }}
+                                />
+                            </Tooltip>
+                        </Space.Compact>
+                        {grn.copy ? (
+                            <span style={{ marginTop: 20, fontSize: 13, color: 'gray' }}>
+                                {t('copiedSuccessText')}
+                            </span>
+                        ) : (
+                            <span style={{ marginTop: 20, fontSize: 13, color: 'transparent' }}>
+                                .
+                            </span> 
+                        )}
+                    </div>
+                </Modal>
                 <Tabs
                     style={{ marginTop: '10px' }}
                     type="card"
@@ -2874,6 +2918,33 @@ function PurchaseEntry() {
                                                     <Form.Item
                                                         label={
                                                         <>
+                                                            {t('totalMrpText')}
+                                                            <Tooltip placement="right" 
+                                                            title={t('purchaseEntryTotalMrpTooltipText')}>
+                                                                <InfoCircleOutlined
+                                                                style={{ marginLeft: 8 }} />
+                                                            </Tooltip>
+                                                        </>
+                                                        }
+                                                        name='purchase-entry-total-mrp'
+                                                        id="purchase-entry-total-mrp"
+                                                    >
+                                                        <InputNumber 
+                                                        disabled
+                                                        placeholder={t('totalMrpText')}
+                                                        style={{ width: '100%' }}
+                                                        value={totalValues?.totalMrp !== undefined ? 
+                                                            totalValues?.totalMrp : undefined}
+                                                        prefix={totalValues?.totalMrp !== undefined ? 
+                                                            (Constant.currencySymbol || Constant.currencyShort) : 
+                                                            undefined}
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col lg={12} md={12} sm={24} xs={24}>
+                                                    <Form.Item
+                                                        label={
+                                                        <>
                                                             {t('roundOffText')}
                                                             <Tooltip placement="right" 
                                                             title={t('purchaseEntryRoundOffTooltipText')}>
@@ -2903,7 +2974,7 @@ function PurchaseEntry() {
                                                         />
                                                     </Form.Item>
                                                 </Col>
-                                                <Col lg={12} md={12} sm={24} xs={24}>
+                                                <Col lg={24} md={24} sm={24} xs={24}>
                                                     <Form.Item
                                                         label={
                                                         <>

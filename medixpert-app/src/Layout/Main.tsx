@@ -230,9 +230,16 @@ const Main: React.FC<MainProps> = ({ children }) => {
                 </div>
                 <Breadcrumb
                   items={
-                    pathname.split('/').filter(segment => segment).map(part => ({
-                      title: part.charAt(0).toUpperCase() + part.slice(1),
+                    pathname
+                    .split('/')
+                    .filter(segment => segment)
+                    .map(part => ({
+                      title: part
+                        .split('-')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ')
                     }))
+
                   }
                 />
               </Col>

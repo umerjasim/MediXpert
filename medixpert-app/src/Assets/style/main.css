@@ -591,3 +591,11 @@ body {
 /* .ant-table-cell {
     background: none !important;
 } */
+
+.bill-items .ant-descriptions-view {
+    border-radius: 0;
+}
+
+.bill-card .ant-card-body {
+    padding: 12px;
+}
