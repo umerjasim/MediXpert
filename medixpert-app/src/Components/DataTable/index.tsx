@@ -1,14 +1,14 @@
-import { BarsOutlined, CloseOutlined, DownloadOutlined, 
-    PrinterOutlined, SearchOutlined } from "@ant-design/icons";
-import { Badge, Button, Checkbox, Col, Empty, Input, List, 
-    Popover, Row, Table, TableProps, Tooltip, Typography } from "antd";
+import { BarsOutlined, CloseOutlined, ColumnHeightOutlined, DownloadOutlined, 
+    InfoCircleOutlined, 
+    PrinterOutlined, ReloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Badge, Button, Checkbox, Col, Dropdown, Empty, Input, InputNumber, List, 
+    MenuProps, 
+    Popover, Radio, Row, Segmented, Select, Space, Table, TableProps, Tooltip, Typography } from "antd";
 import { inject, observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import itemStore from "../../Store/itemStore";
 import { t } from "i18next";
 import { createStyles } from 'antd-style';
-import { IconButton } from "@mui/material";
-import ReplayIcon from '@mui/icons-material/Replay';
 import Constant from "../../Global/Constant";
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -18,6 +18,7 @@ import html2pdf from 'html2pdf.js';
 import Notification from "../../Global/Notification";
 import { CSVLink } from 'react-csv';
 import Papa from 'papaparse';
+import { ColumnsType } from "antd/es/table";
 
 const useStyle = createStyles(({ css, token }) => {
     const antCls = '.ant';
@@ -44,6 +45,12 @@ interface DataTableProps {
     exportFileName?: string;
 }
 
+interface RecordType {
+    [key: string]: any;
+}
+
+const { Option } = Select;
+
 export const DataTable: React.FC<DataTableProps> = ({ 
     data,
     columns,
@@ -53,12 +60,217 @@ export const DataTable: React.FC<DataTableProps> = ({
     const { Title, Text } = Typography;
     const { styles } = useStyle();
 
-    const [itemData, setItemData] = useState<Array<any>>([]);
+    const [itemData, setItemData] = useState<Array<RecordType>>([]);
     const [paginationConfig, setPaginationConfig] = useState<{ current: number, pageSize: number }>(
         { current: 1,  pageSize: Constant.paginationSize }
     );
     const [columnsSelectOpen, setColumnsSelectOpen] = useState<boolean>(false);
     const [checkedList, setCheckedList] = useState<string[]>([]);
+    const [filters, setFilters] = useState<{ [key: string]: any }>({});
+    const [size, setSize] = useState<"small" | "default" | "large">("default");
+
+    const handleFilter = (
+        columnKey: string,
+        operator: string,
+        value: string | null = null,
+        confirm: () => void
+    ) => {
+        setFilters((prev) => ({
+            ...prev,
+            [columnKey]: { operator, value },
+        }));
+        confirm();
+        setItemData(data);
+    };
+    
+    const clearFilter = (columnKey: string, clearFilters: () => void) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev };
+            delete newFilters[columnKey];
+            return newFilters;
+        });
+        clearFilters();
+    };  
+
+    const filterData = (data: RecordType[]) => {
+        return data.filter((record) => {
+            return Object.entries(filters).every(([columnKey, { operator, value }]) => {
+                const columnValue = record[columnKey as keyof RecordType] ?? "";
+    
+                switch (operator) {
+                    case "contains":
+                        return String(columnValue).toLowerCase().includes((value ?? "").toLowerCase());
+                    case "doesNotContain":
+                        return !String(columnValue).toLowerCase().includes((value ?? "").toLowerCase());
+                    case "equals":
+                        return String(columnValue) === value;
+                    case "doesNotEqual":
+                        return String(columnValue) !== value;
+                    case "startsWith":
+                        return String(columnValue).toLowerCase().startsWith((value ?? "").toLowerCase());
+                    case "endsWith":
+                        return String(columnValue).toLowerCase().endsWith((value ?? "").toLowerCase());
+                    case "isEmpty":
+                        return columnValue === null || columnValue === undefined || columnValue === "";
+                    case "isNotEmpty":
+                        return columnValue !== null && columnValue !== undefined && columnValue !== "";
+                    case "equalTo":
+                        return columnValue === Number(value);
+                    case "notEqualTo":
+                        return columnValue !== Number(value);
+                    case "greaterThan":
+                        return columnValue > Number(value);
+                    case "greaterThanOrEqualTo":
+                        return columnValue >= Number(value);
+                    case "lessThan":
+                        return columnValue < Number(value);
+                    case "lessThanOrEqualTo":
+                        return columnValue <= Number(value);
+                    default:
+                        return true;
+                }
+            });
+        });
+    };
+
+    const FilterDropdown = ({
+        columnKey,
+        columnType,
+        setSelectedKeys,
+        confirm,
+        clearFilters,
+        selectedKeys,
+    }: {
+        columnKey: string;
+        columnType: string;
+        setSelectedKeys: (keys: any[]) => void;
+        confirm: () => void;
+        clearFilters: () => void;
+        selectedKeys: any[];
+    }) => {
+        const isEmptyOperators = ["isEmpty", "isNotEmpty"];
+        const operators =
+            columnType === "string"
+                    ? [
+                        { value: "contains", label: t('operators.containsText') },
+                        { value: "doesNotContain", label:  t('operators.doesNotContainText') },
+                        { value: "equals", label:  t('operators.equalsText') },
+                        { value: "doesNotEqual", label:  t('operators.doesNotEqualText') },
+                        { value: "startsWith", label:  t('operators.startsWithText') },
+                        { value: "endsWith", label:  t('operators.endsWithText') },
+                        { value: "isEmpty", label:  t('operators.isEmptyText') },
+                        { value: "isNotEmpty", label:  t('operators.isNotEmptyText') },
+                    ]
+                    : columnType === "number" 
+                    ? [
+                        { value: "equalTo", label:  t('operators.equalToText') },
+                        { value: "notEqualTo", label:  t('operators.notEqualToText') },
+                        { value: "greaterThan", label:  t('operators.greaterThanText') },
+                        { value: "greaterThanOrEqualTo", label:  t('operators.greaterThanOrEqualToText') },
+                        { value: "lessThan", label:  t('operators.lessThanText') },
+                        { value: "lessThanOrEqualTo", label:  t('operators.lessThanOrEqualToText') },
+                        { value: "isEmpty", label:  t('operators.isEmptyText') },
+                        { value: "isNotEmpty", label:  t('operators.isNotEmptyText') },
+                    ]
+                : [];
+        
+        const selectedFilter = selectedKeys[0] || { operator: null, value: null };
+
+        useEffect(() => {
+            if (!selectedFilter.operator && operators.length > 0) {
+                setSelectedKeys([{ ...selectedFilter, operator: operators[0].value }]);
+            }
+        }, [selectedFilter.operator, operators, setSelectedKeys]);
+
+        return (
+            <div style={{ padding: 8 }}>
+                <Space direction="vertical">
+                    <Select
+                        placeholder={t('operatorText')}
+                        style={{ width: 180 }}
+                        value={selectedFilter.operator || null}
+                        onChange={(value) =>
+                            setSelectedKeys([{ ...selectedFilter, operator: value }])
+                        }
+                    >
+                        {operators.map((op) => (
+                            <Option key={op.value} value={op.value}>
+                                {op.label}
+                            </Option>
+                        ))}
+                    </Select>
+                    {!isEmptyOperators.includes(selectedFilter.operator) && (
+                        <Input
+                            placeholder={t('valueText')}
+                            value={selectedFilter.value || ""}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (columnType === "number") {
+                                    const numericValue = inputValue
+                                        .replace(/[^0-9.-]/g, '')
+                                        .replace(/(?!^)-/g, '')
+                                        .replace(/(\..*?)\./g, '$1');
+                                    setSelectedKeys([{ ...selectedFilter, value: numericValue }]);
+                                } else {
+                                    setSelectedKeys([{ ...selectedFilter, value: e.target.value }]);
+                                }
+                            }}
+                            style={{ width: 180 }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    setSelectedKeys([{ ...selectedFilter, value: e.currentTarget.value }]);
+                                    handleFilter(
+                                        columnKey,
+                                        selectedFilter.operator || "",
+                                        selectedFilter.value || "",
+                                        confirm
+                                    );
+                                }
+                            }}
+                        />
+                    )}
+                    <Space style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    borderTop: '1px solid #f0f0f0',
+                    paddingTop: '7px' 
+                    }}
+                    >
+                        <Button
+                            onClick={() => {
+                                clearFilter(columnKey, clearFilters);
+                                confirm();
+                            }}
+                            size="small"
+                            type="link"
+                            // style={{ width: 65 }}
+                        >
+                            Reset
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                handleFilter(
+                                    columnKey,
+                                    selectedFilter.operator || "",
+                                    selectedFilter.value || "",
+                                    confirm
+                                );
+                            }}
+                            size="small"
+                            // style={{ width: 65 }}
+                        >
+                            OK
+                        </Button>
+                    </Space>
+                </Space>
+            </div>
+        );
+    };
+
+    const getFilterDropdown = (columnKey: string, columnType: string) => {
+        return (props: any) => <FilterDropdown columnKey={columnKey} columnType={columnType} {...props} />;
+    };
 
     const handleSelectColumn = (e: any, columnKey: string) => {
         const isChecked = e.target.checked;
@@ -69,6 +281,56 @@ export const DataTable: React.FC<DataTableProps> = ({
             setCheckedList(checkedList.filter(key => key !== columnKey));
         }
     };
+
+    const mapColumns = (columns: ColumnsType<RecordType>): ColumnsType<RecordType> => {
+        return columns.map((column: any) => {
+            const inferColumnType = (dataIndex: string) => {
+                const sampleValue = itemData.find(item => item[dataIndex] !== undefined)?.[dataIndex];
+                if (typeof sampleValue === "number") {
+                    return "number";
+                }
+                if (typeof sampleValue === "string") {
+                    return "string";
+                }
+                if (typeof sampleValue === "boolean") {
+                    return "boolean";
+                }
+                return "string";
+            };
+    
+            if (column.filters) {
+                const columnType = column.type || inferColumnType(column.dataIndex);
+    
+                if (columnType === "boolean") {
+                    return {
+                        ...column,
+                        onFilter: (value: any, record: any) => record[column.dataIndex] === value,
+                        ellipsis: column.ellipsis ?? true,
+                    };
+                }
+    
+                return {
+                    ...column,
+                    filterDropdown: getFilterDropdown(column.key, columnType),
+                    ellipsis: column.ellipsis ?? true,
+                };
+            }
+
+            if (column.children && column.children.length > 0) {
+                return {
+                    ...column,
+                    children: mapColumns(column.children),
+                };
+            }
+
+            return {
+                ...column,
+                hidden: checkedList.includes(column.key),
+            };
+        });
+    };
+    
+    const mappedColumns = mapColumns(columns || []);    
 
     const items = columns?.flatMap((column: any, index: number) => 
         column.children ? (
@@ -100,7 +362,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         }]
     );
     
-    const newColumns = columns?.map((item: any) => {
+    const newColumns = mappedColumns?.map((item: any) => {
         if (item.children && item.children.length > 0) {
           const allChildrenHidden = item.children.every((child: any) => checkedList.includes(child.key));
       
@@ -155,7 +417,7 @@ export const DataTable: React.FC<DataTableProps> = ({
     const exportToCSV = () => {
         const customHeaders: any[] = getCustomHeaders(columns);
     
-        const formattedData = itemData.map((row: any) => {
+        const formattedData = filterData(itemData).map((row: any) => {
             const newRow: Record<string, any> = {};
     
             customHeaders.forEach(header => {
@@ -222,7 +484,7 @@ export const DataTable: React.FC<DataTableProps> = ({
     const exportToExcel = () => {
         const customHeaders: any[] = getCustomHeaders(columns);
 
-        const formattedData = itemData.map((row: any) => {
+        const formattedData = filterData(itemData).map((row: any) => {
             const newRow: Record<string, any> = {};
 
             customHeaders.forEach(header => {
@@ -316,12 +578,12 @@ export const DataTable: React.FC<DataTableProps> = ({
         });
         html += '</tr>';
 
-        if (itemData.length === 0) {
+        if (filterData(itemData).length === 0) {
             html += '<tr>';
             html += `<td colspan="${customHeaders.length}" style="padding: 5px; text-align: center;">No data available</td>`;
             html += '</tr>';
         } else {
-            itemData.forEach((item: any) => {
+            filterData(itemData).forEach((item: any) => {
                 html += '<tr>';
                 customHeaders.forEach(header => {
                     if (header.children && header.children.length > 0) {
@@ -435,7 +697,7 @@ export const DataTable: React.FC<DataTableProps> = ({
             });
             printWindow.document.write('</tr>');
     
-            itemData.forEach((item: any) => {
+            filterData(itemData).forEach((item: any) => {
                 printWindow.document.write('<tr>');
                 customHeaders.forEach(header => {
                     if (header.children && header.children.length > 0) {
@@ -472,6 +734,28 @@ export const DataTable: React.FC<DataTableProps> = ({
     const getRowClassName = (record: any) => {
         return record?.active === 1 || record?.active ? 'active-row' : 'inactive-row';
     };
+
+    const exportOptions: MenuProps['items'] = [
+        {
+          label: <Tooltip title={t('exportCSVText')}>{t('csvText')}</Tooltip>,
+          key: 'csv',
+          onClick: exportToCSV,
+        },
+        {
+          label:  <Tooltip title={t('exportExcelText')}>{t('excelText')}</Tooltip>,
+          key: 'excel',
+          onClick: exportToExcel,
+        },
+        {
+          label:  <Tooltip title={t('exportPDFText')}>{t('pdfText')}</Tooltip>,
+          key: 'pdf',
+          onClick: exportToPDF,
+        },
+    ];
+
+    const exportMenuProps = {
+        items: exportOptions,
+    };
     
     return (
             <>
@@ -479,7 +763,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 className={styles.customTable}
                 scroll={{ x: 'max-content',  y: 55 * 5 }}
                 columns={newColumns} 
-                dataSource={itemData}
+                dataSource={filterData(itemData)}
                 bordered
                 rowClassName={getRowClassName}
                 locale={{
@@ -493,7 +777,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 pagination={{ 
                     current: paginationConfig.current,
                     pageSize: paginationConfig.pageSize, 
-                    total: itemData.length,
+                    total: filterData(itemData).length,
                     showTotal: (total) => `Total ${total} items`,
                     showSizeChanger: true,
                     onShowSizeChange: (current, size) => {
@@ -502,135 +786,165 @@ export const DataTable: React.FC<DataTableProps> = ({
                     hideOnSinglePage: true
                 }}
                 title={() => (
-                    <Row gutter={[16, 4]}>
-                        <Col lg={8}>
+                    <Row gutter={[16, 8]}>
+                        <Col lg={3} md={4} sm={8} xs={12}>
+                            <Button
+                                size={size === 'default' ? undefined : size}
+                                onClick={() => getItems()}
+                                style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
+                                block
+                                variant="filled"
+                                color="default"
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, justifyContent: 'center' }}>
+                                    <ReloadOutlined />
+                                    <span>{t('reloadText')}</span>
+                                </span>
+                                <Tooltip title={t('reloadTooltipText')}>
+                                    <InfoCircleOutlined />
+                                </Tooltip>
+                            </Button>
+                        </Col>
+                        <Col lg={3} md={5} sm={8} xs={12}>
                             <div>
-                                <Tooltip title={t('showHideColumnsText')} >
-                                    <Popover
-                                    placement="bottom"
-                                    content={
-                                        <>
-                                            <List
-                                            footer={
-                                                <Button block 
-                                                style={{ height: '25px' }}
-                                                onClick={() => setCheckedList([])}
-                                                >
-                                                    {t('resetText')}
-                                                </Button>
-                                            }
-                                            size="small"
-                                            bordered
-                                            dataSource={items}
-                                            renderItem={(item: any, index: number) => (
-                                                <List.Item key={item.key}>
-                                                <List.Item.Meta
-                                                    title={item.label}
-                                                />
-                                                </List.Item>
-                                            )}
+                                <Popover
+                                placement="bottom"
+                                content={
+                                    <div>
+                                        <List
+                                        style={{ height: 200, overflowY: 'auto' }}
+                                        size="small"
+                                        bordered
+                                        dataSource={items}
+                                        renderItem={(item: any, index: number) => (
+                                            <List.Item key={item.key}>
+                                            <List.Item.Meta
+                                                title={item.label}
                                             />
-                                        </>
-                                    }
-                                    title={
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <span style={{ marginRight: 8 }}>{t('showHideColumnsText')}</span>
+                                            </List.Item>
+                                        )}
+                                        />
+                                        <div style={{ textAlign: 'center', marginTop: 10 }}>
+                                            <Button block 
+                                            style={{ height: '25px' }}
+                                            onClick={() => {
+                                                setCheckedList([]);
+                                                setColumnsSelectOpen(false);
+                                            }}
+                                            >
+                                                {t('resetText')}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                }
+                                title={
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ marginRight: 8 }}>{t('showHideColumnsText')}</span>
                                         <span onClick={closeColumnSelectPopover}>
                                             <CloseOutlined style={{ cursor: 'pointer', fontSize: '12px' }} />
                                         </span>
-                                        </div>
-                                    }
-                                    trigger="click"
-                                    open={columnsSelectOpen}
-                                    onOpenChange={handleColumnsSelectOpen}
-                                    arrow={false}
+                                    </div>
+                                }
+                                trigger="click"
+                                open={columnsSelectOpen}
+                                onOpenChange={handleColumnsSelectOpen}
+                                arrow={false}
+                                >
+                                    <Button
+                                        size={size === 'default' ? undefined : size}
+                                        style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
+                                        block
+                                        variant="filled"
+                                        color="default"
                                     >
-                                        <Badge dot={checkedList.length > 0}>
-                                            <IconButton
-                                            size="small"
-                                            style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
-                                            >
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, justifyContent: 'center' }}>
+                                            <Badge dot={checkedList.length > 0}>
                                                 <BarsOutlined />
-                                            </IconButton>
-                                        </Badge>
-                                    </Popover>
-                                </Tooltip>
-                                <Tooltip title={t('reloadText')} >
-                                    <IconButton
-                                    size="small"
-                                    onClick={()=> getItems()}
-                                    style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
-                                    >
-                                        <ReplayIcon />
-                                    </IconButton>
-                                </Tooltip>
+                                            </Badge>
+                                            <span>{t('columnsText')}</span>
+                                        </span>
+                                        <Tooltip title={t('showHideColumnsText')}>
+                                            <InfoCircleOutlined />
+                                        </Tooltip>
+                                    </Button>
+                                </Popover>
                             </div>
                         </Col>
-                        <Col lg={10}>
-                            <Row gutter={[16, 6]}>
-                                <Col lg={6} xs={12}>
-                                <Tooltip title={t('exportCSVText')} >
-                                    <Button size="small"
-                                    block 
-                                    variant="dashed"
-                                    color="primary"
-                                    icon={<DownloadOutlined />}
-                                    onClick={exportToCSV}
-                                    style={{ marginRight: 5 }}
-                                    >
-                                        {t('csvText')}
-                                    </Button>
-                                </Tooltip>
-                                </Col>
-                                <Col lg={6} xs={12}>
-                                <Tooltip title={t('exportExcelText')} >
-                                    <Button size="small"
+                        <Col lg={3} md={5} sm={8} xs={12}>
+                            <Dropdown menu={exportMenuProps}>
+                                <Button
+                                    size={size === 'default' ? undefined : size}
+                                    style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
                                     block
-                                    variant="dashed"
-                                    color="primary"
-                                    icon={<DownloadOutlined />}
-                                    onClick={exportToExcel}
-                                    style={{ marginRight: 5 }}
-                                    >
-                                        {t('excelText')}
-                                    </Button>
-                                </Tooltip>
-                                </Col>
-                                <Col lg={6} xs={12}>
-                                <Tooltip title={t('exportPDFText')} >
-                                    <Button size="small"
-                                    block
-                                    variant="dashed"
-                                    color="primary"
-                                    icon={<DownloadOutlined />}
-                                    onClick={exportToPDF}
-                                    style={{ marginRight: 5 }}
-                                    >
-                                        {t('pdfText')}
-                                    </Button>
-                                </Tooltip>
-                                </Col>
-                                <Col lg={6} xs={12}>
-                                <Tooltip title={t('printText')} >
-                                    <Button size="small"
-                                    block
-                                    variant="dashed"
-                                    color="primary"
-                                    icon={<PrinterOutlined />}
-                                    onClick={printData}
-                                    >
-                                        {t('printText')}
-                                    </Button>
-                                </Tooltip>
-                                </Col>
-                            </Row>
+                                    variant="filled"
+                                    color="default"
+                                >
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, justifyContent: 'center' }}>
+                                        <DownloadOutlined />
+                                        <span>{t('downloadText')}</span>
+                                    </span>
+                                    <Tooltip title={t('downloadTooltipText')}>
+                                        <InfoCircleOutlined />
+                                    </Tooltip>
+                                </Button>
+                            </Dropdown>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={3} md={3} sm={12} xs={12}>
+                            <Button
+                                size={size === 'default' ? undefined : size}
+                                style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
+                                onClick={printData}
+                                block
+                                variant="filled"
+                                color="default"
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, justifyContent: 'center' }}>
+                                    <PrinterOutlined />
+                                    <span>{t('printText')}</span>
+                                </span>
+                                <Tooltip title={t('printTooltipText')}>
+                                    <InfoCircleOutlined />
+                                </Tooltip>
+                            </Button>
+                        </Col>
+                        <Col lg={4} md={5} sm={12} xs={12}>
+                            <Segmented
+                            options={[
+                                {
+                                    label: <div style={{ padding: 1, display: 'flex', gap: 6 }}>
+                                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('smallText')}</span>
+                                                <Tooltip title={t('densitySmallTooltipText')} ><InfoCircleOutlined style={{ marginTop: 2 }} /></Tooltip>
+                                            </div>,
+                                    value: 'small'
+                                },
+                                {
+                                    label: <div style={{ padding: 1, display: 'flex', gap: 6 }}>
+                                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('defaultText')}</span>
+                                                <Tooltip title={t('densityDefaultTooltipText')} ><InfoCircleOutlined style={{ marginTop: 2 }} /></Tooltip>
+                                            </div>,
+                                    value: 'default'
+                                },
+                                {
+                                    label: <div style={{ padding: 1, display: 'flex', gap: 6 }}>
+                                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('largeText')}</span>
+                                                <Tooltip title={t('densityLargeTooltipText')} ><InfoCircleOutlined style={{ marginTop: 2 }} /></Tooltip>
+                                            </div>,
+                                    value: 'large'
+                                },
+                            ]}
+                            size={size === 'default' ? undefined : size}
+                            value={size}
+                            onChange={(value: any) => setSize(value)}
+                            block
+                            />
+                        </Col>
+                        <Col lg={4}></Col>
+                        <Col lg={4} md={24} sm={24} xs={24}>
                             <div>
                                 <Input 
-                                placeholder={t('searchText')} 
+                                placeholder={t('searchText')+'...'} 
                                 prefix={<SearchOutlined />}
-                                size="small"
+                                size={size === 'default' ? undefined : size}
                                 onChange={handleDataSearch}
                                 />
                             </div>
@@ -638,7 +952,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     </Row>
                 )}
                 // footer={() => 'Footer'}
-                size="small"
+                size={size === 'default' ? 'middle' : size}
                 />
             </>
     );

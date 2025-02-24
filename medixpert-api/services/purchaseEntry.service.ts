@@ -1,7 +1,7 @@
 import { UserRequest } from "../helpers/jwt";
 import { Response } from "express";
 import logger from "../helpers/logger";
-import { collectionNames, msg, requestCode } from "../helpers/constants";
+import { collectionNames, msg, numberKeyWords, requestCode } from "../helpers/constants";
 import { geti18nResponse } from "../i18n";
 import { dbHandler } from "../config/dbConfig";
 import { ObjectId } from "mongodb";
@@ -128,6 +128,8 @@ async function generateGRN() {
         const currentYear = new Date().getFullYear();
         const nextYear = currentYear + 1;
         const currentFinancialYear = `${currentYear.toString().slice(-2)}${nextYear.toString().slice(-2)}`;
+        const keyWord: string = numberKeyWords.grnNo || 'GRN';
+        const keyWordLength: number = keyWord.length;
 
         const grnNos = await dbHandler(
             collectionNames.purchaseEntries,
@@ -140,19 +142,19 @@ async function generateGRN() {
         );
 
         if (grnNos?.grnNo) {
-            const existingYear = grnNos.grnNo.slice(3, 7);
+            const existingYear = grnNos.grnNo.slice(keyWord + 4, 7);
             let nextSerial;
 
             if (existingYear === currentFinancialYear) {
-                const existingSerial = parseInt(grnNos.grnNo.slice(7), 10);
+                const existingSerial = parseInt(grnNos.grnNo.slice(keyWord + 4), 10);
                 nextSerial = (existingSerial + 1).toString().padStart(8, '0');
             } else {
-                nextSerial = '00000001';
+                nextSerial = numberKeyWords.grnNoStart;
             }
 
-            return `GRN${currentFinancialYear}${nextSerial}`;
+            return `${numberKeyWords.grnNo}${currentFinancialYear}${nextSerial}`;
         } else {
-            return `GRN${currentFinancialYear}00000001`;
+            return `${numberKeyWords.grnNo}${currentFinancialYear}${numberKeyWords.grnNoStart}`;
         }
     } catch (error) {
         throw error;

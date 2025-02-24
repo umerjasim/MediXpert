@@ -72,7 +72,7 @@ const PreviewPdf: React.FC<PreviewPdfProps> = ({
           onOk={handleOk}
           onCancel={handleCancel}
           cancelButtonProps={{ style: { display: 'none' } }}
-          width={700}
+          width={'50%'}
           modalRender={(modal) => (
             <Draggable
               disabled={disabled}
@@ -87,7 +87,7 @@ const PreviewPdf: React.FC<PreviewPdfProps> = ({
           <iframe
             src={pdfUrl || undefined}
             width="100%"
-            height={400}
+            style={{ height: '60vh' }}
             title={fileName || undefined}
           />
         </Modal>

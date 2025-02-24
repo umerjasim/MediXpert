@@ -67,7 +67,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.masterName === value,
+            // onFilter: (value, record) => record.masterName === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -85,7 +85,7 @@ function Items() {
             text: type, 
             value: type
           })),
-          onFilter: (value, record) => record.name === value,
+        //   onFilter: (value, record) => record.name === value,
           filterSearch: true,
           fixed: 'left',
           width: 150,
@@ -104,7 +104,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.genericName === value,
+            // onFilter: (value, record) => record.genericName === value,
             filterSearch: true,
             width: 140,
             ellipsis: true,
@@ -122,7 +122,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.typeName === value,
+            // onFilter: (value, record) => record.typeName === value,
             filterSearch: true,
             width: 120,
             ellipsis: true,
@@ -140,7 +140,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.categoryName === value,
+            // onFilter: (value, record) => record.categoryName === value,
             filterSearch: true,
             width: 140,
             ellipsis: true,
@@ -158,7 +158,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.qtyUnitName === value,
+            // onFilter: (value, record) => record.qtyUnitName === value,
             filterSearch: true,
             width: 100,
             ellipsis: true,
@@ -176,7 +176,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.reorderQty === value,
+            // onFilter: (value, record) => record.reorderQty === value,
             filterSearch: true,
             width: 100,
             ellipsis: true,
@@ -219,7 +219,7 @@ function Items() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.risk === value,
+            // onFilter: (value, record) => record.risk === value,
             filterSearch: true,
             width: 100,
             ellipsis: true,
@@ -323,10 +323,10 @@ function Items() {
                     value: branchName
                 }))
             ],
-            onFilter: (value, record) => {
-                const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
-                return hasBranch;
-            },
+            // onFilter: (value, record) => {
+            //     const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
+            //     return hasBranch;
+            // },
             width: 140,
             fixed: 'right'
         },
@@ -343,7 +343,7 @@ function Items() {
                 { text: t('activeText'), value: true },
                 { text: t('inactiveText'), value: false },
             ],
-            onFilter: (value, record) => record.active === value,
+            // onFilter: (value, record) => record.active === value,
             filterSearch: true,
             width: 60,
             render: (value: any, record: any, index: number) => {

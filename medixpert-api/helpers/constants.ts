@@ -151,5 +151,27 @@ export const collectionNames = {
     purchaseEntryAmounts: 'purchaseEntryAmounts',
     purchaseEntryItems: 'purchaseEntryItems',
     itemsStock: 'itemsStock',
-    itemsStockTemp: 'itemsStockTemp'
+    itemsStockTemp: 'itemsStockTemp',
+    paymentTypes: 'paymentTypes',
+    saleMaster: 'saleMaster',
+    saleItems: 'saleItems',
+    salePatientMaster: 'salePatientMaster',
+    salePatientVisit: 'salePatientVisit',
+    saleInvoice: 'saleInvoice',
+    doctors: 'doctors',
+    places: 'places',
+    billMaster: 'billMaster',
+    billDetails: 'billDetails',
+    saleBill: 'saleBill',
+    pageSizes: 'pageSizes',
+    replacingHashtags: 'replacingHashtags'
+};
+
+export const numberKeyWords = {
+  grnNo: 'GRN',
+  grnNoStart: '00000001',
+  invoiceNo: 'IN',
+  invoiceNoStart: '00000001',
+  billNo: 'BL',
+  billNoStart: '00000001',
 };

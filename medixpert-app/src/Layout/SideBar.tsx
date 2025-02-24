@@ -10,7 +10,7 @@ import { Avatar, Button, Divider, Drawer, Layout, Menu, MenuProps, Tooltip, Typo
 import { NavLink, useLocation } from 'react-router-dom';
 import Icon from "../Components/Icon"
 import Constant from '../Global/Constant';
-import logo from "../Assets/media/images/img-logo.jpg";
+import logo from "../Assets/media/images/mx/mx-logo.png";
 import { inject, observer } from 'mobx-react';
 import globalStore from '../Store/globalStore';
 import { t } from 'i18next';

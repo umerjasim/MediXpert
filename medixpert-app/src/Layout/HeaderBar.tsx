@@ -51,6 +51,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
 
   const handleSettingDrawer = () => {
     setSettingDrawerOpen(true);
+    globalStore.setSettingDrawerOpen(true);
   };
 
   const onModeChange = (checked: boolean) => {
@@ -124,7 +125,10 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
           }
           placement='right'
           closable={true}
-          onClose={() => setSettingDrawerOpen(false)}
+          onClose={() => {
+            setSettingDrawerOpen(false);
+            globalStore.setSettingDrawerOpen(false);
+          }}
           open={settingDrawerOpen}
           key='right'
           width={300}

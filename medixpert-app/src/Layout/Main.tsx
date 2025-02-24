@@ -1,12 +1,13 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import {
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, ConfigProvider, Grid, Layout, Menu, Row, theme } from 'antd';
+import { Breadcrumb, Button, Col, ConfigProvider, Grid, Layout, Menu, Row, theme, Typography } from 'antd';
 import SideBar from './SideBar';
 import authStore from '../Store/authStore';
 import { useLocation } from 'react-router-dom';
@@ -22,6 +23,7 @@ import { NavLink } from 'react-router-dom';
 import branchStore from '../Store/branchStore';
 
 const { Header, Sider, Content } = Layout;
+const { Link } = Typography;
 
 interface MainProps {
   children: ReactNode;
@@ -176,6 +178,7 @@ const Main: React.FC<MainProps> = ({ children }) => {
           }}
           collapsible 
           collapsed={collapsed}
+          width={260}
         >
           <SideBar
             accessPages={accessPages}
@@ -229,18 +232,24 @@ const Main: React.FC<MainProps> = ({ children }) => {
                   {pageTitle.replace("/", "")}
                 </div>
                 <Breadcrumb
-                  items={
-                    pathname
-                    .split('/')
-                    .filter(segment => segment)
-                    .map(part => ({
-                      title: part
-                        .split('-')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ')
-                    }))
-
-                  }
+                  items={[
+                      {
+                          title: (
+                              <Link href='/dashboard' style={{ cursor: 'pointer' }}>
+                                  <HomeOutlined />
+                              </Link>
+                          ),
+                      },
+                      ...pathname
+                          .split('/')
+                          .filter(segment => segment)
+                          .map(part => ({
+                              title: part
+                                  .split('-')
+                                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                  .join(' '),
+                          })),
+                  ]}
                 />
               </Col>
               <Col lg={8}>

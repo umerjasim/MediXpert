@@ -23,6 +23,8 @@ const Taxes = lazy(() => import("../Pages/Taxes"));
 const PurchaseEntry = lazy(() => import("../Pages/PurchaseEntry"));
 const ApprovePurchaseEntry = lazy(() => import("../Pages/ApprovePurchaseEntry"));
 const Sale = lazy(() => import("../Pages/Sale"));
+const Designer = lazy(() => import("../Pages/Designer"));
+const Branches = lazy(() => import("../Pages/Branches"));
 
 const { Header, Content } = Layout;
 
@@ -57,6 +59,8 @@ const MainComponent = () => {
               <Route path={RoutesPath.purchaseEntry} element={<AccessRoute access={RoutesPath.purchaseEntry}><PurchaseEntry /></AccessRoute>} />
               <Route path={RoutesPath.approvePurchaseEntry} element={<AccessRoute access={RoutesPath.approvePurchaseEntry}><ApprovePurchaseEntry /></AccessRoute>} />
               <Route path={RoutesPath.sale} element={<AccessRoute access={RoutesPath.sale}><Sale /></AccessRoute>} />
+              <Route path={RoutesPath.designer} element={<AccessRoute access={RoutesPath.designer}><Designer /></AccessRoute>} />
+              <Route path={RoutesPath.branches} element={<AccessRoute access={RoutesPath.branches}><Branches /></AccessRoute>} />
               {/* <Route path={RoutesPath.inspections} element={<AccessRoute access={task}><InspectionTask /></AccessRoute>} />
               <Route path={RoutesPath.individualTask + ':id'} element={<AccessRoute access={task}><TaskIndividual /></AccessRoute>} />
               <Route path={RoutesPath.reports} element={<AccessRoute access={report}><Reports /></AccessRoute>} />

@@ -170,7 +170,7 @@ function Taxes() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.name === value,
+            // onFilter: (value, record) => record.name === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -189,7 +189,7 @@ function Taxes() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.value === value,
+            // onFilter: (value, record) => record.value === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -245,10 +245,10 @@ function Taxes() {
                     value: branchName
                 }))
             ],
-            onFilter: (value, record) => {
-                const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
-                return hasBranch;
-            },
+            // onFilter: (value, record) => {
+            //     const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
+            //     return hasBranch;
+            // },
             width: 140,
             fixed: 'right'
         },
@@ -265,7 +265,7 @@ function Taxes() {
                 { text: t('activeText'), value: true },
                 { text: t('inactiveText'), value: false },
             ],
-            onFilter: (value, record) => record.active === value,
+            // onFilter: (value, record) => record.active === value,
             filterSearch: true,
             width: 60,
             render: (value: any, record: any, index: number) => {

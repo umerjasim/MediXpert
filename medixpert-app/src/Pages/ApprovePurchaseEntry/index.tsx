@@ -245,7 +245,7 @@ function ApprovePurchaseEntry() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.grn === value,
+            // onFilter: (value, record) => record.grn === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -271,7 +271,7 @@ function ApprovePurchaseEntry() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.supplier === value,
+            // onFilter: (value, record) => record.supplier === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -293,7 +293,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.invoiceNo === value,
+                    // onFilter: (value, record) => record.invoiceNo === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -311,7 +311,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.invoiceDate === value,
+                    // onFilter: (value, record) => record.invoiceDate === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -329,7 +329,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.discount === value,
+                    // onFilter: (value, record) => record.discount === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -355,7 +355,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.invoiceAmount === value,
+                    // onFilter: (value, record) => record.invoiceAmount === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -383,7 +383,7 @@ function ApprovePurchaseEntry() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.totalMrp === value,
+            // onFilter: (value, record) => record.totalMrp === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -413,7 +413,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.createdOn === value,
+                    // onFilter: (value, record) => record.createdOn === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -431,7 +431,7 @@ function ApprovePurchaseEntry() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.createdBy === value,
+                    // onFilter: (value, record) => record.createdBy === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -455,7 +455,7 @@ function ApprovePurchaseEntry() {
                 text: type,
                 value: type
             })),
-            onFilter: (value, record) => record.remarks === value,
+            // onFilter: (value, record) => record.remarks === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -475,7 +475,7 @@ function ApprovePurchaseEntry() {
                 { text: t('approvedText'), value: true },
                 { text: t('notApprovedText'), value: false },
             ],
-            onFilter: (value, record) => record?.approved?.status === value,
+            // onFilter: (value, record) => record?.approved?.status === value,
             filterSearch: true,
             render(value, record, index) {
                 if (record?.approved?.status) {

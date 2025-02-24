@@ -7,6 +7,7 @@ import routes from './routes';
 import { connectToDatabase } from './config/dbConfig';
 import dotenv from 'dotenv';
 import initializeDB from './config/db';
+import updateIndexes from './config/updateIndexes';
 dotenv.config();
 
 const app = express();
@@ -30,6 +31,7 @@ const server = http.createServer(app);
 connectToDatabase().then(() => {
     module.exports = server.listen(PORT, () => {
         // initializeDB();
+        // updateIndexes();
         console.log(`App listening on port ${PORT}!`);
     });
 }).catch(err => {

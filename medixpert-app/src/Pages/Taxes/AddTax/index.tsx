@@ -15,7 +15,7 @@ interface AddTaxProps {
     loading: boolean;
 }
 
-const AddSupplier: React.FC<AddTaxProps> = ({
+const AddTax: React.FC<AddTaxProps> = ({
     isModalOpen,
     handleOk,
     handleCancel,
@@ -458,4 +458,4 @@ const AddSupplier: React.FC<AddTaxProps> = ({
     );
 };
 
-export default inject('globalStore')(observer(AddSupplier));
+export default inject('globalStore')(observer(AddTax));

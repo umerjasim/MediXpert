@@ -3,6 +3,14 @@ import Constant from './Constant';
 import type { RcFile } from 'antd/es/upload/interface';
 import Notification from './Notification';
 import i18n from '../i18n';
+import dayjs from 'dayjs';
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(weekOfYear);
 
 class Utility {
   parseJwt(token: string) {
@@ -339,6 +347,51 @@ class Utility {
     } else {
       return '';
     }
+  }
+
+  getPresetDateRange = (fromDate: dayjs.Dayjs, toDate: dayjs.Dayjs) => {
+    const today = dayjs().startOf("day");
+    const yesterday = today.subtract(1, "day");
+    const startOfWeek = today.startOf("week");
+    const endOfWeek = today.endOf("week");
+    const startOfMonth = today.startOf("month");
+    const endOfMonth = today.endOf("month");
+
+    const last7DaysStart = today.subtract(6, "days");
+    const last14DaysStart = today.subtract(13, "days");
+    const last30DaysStart = today.subtract(29, "days");
+    const last90DaysStart = today.subtract(89, "days");
+
+    const rangePresets = [
+        { label: "Today", start: today, end: today.endOf("day") },
+        { label: "Yesterday", start: yesterday, end: yesterday.endOf("day") },
+        { label: "This Week", start: startOfWeek, end: today.endOf("day") },
+        { label: "This Month", start: startOfMonth, end: today.endOf("day") },
+        { label: "Last 7 Days", start: last7DaysStart, end: today.endOf("day") },
+        { label: "Last 14 Days", start: last14DaysStart, end: today.endOf("day") },
+        { label: "Last 30 Days", start: last30DaysStart, end: today.endOf("day") },
+        { label: "Last 90 Days", start: last90DaysStart, end: today.endOf("day") }
+    ];
+
+    const adjustedFrom = fromDate.startOf("day");
+    const adjustedTo = toDate.endOf("day");
+
+    for (const preset of rangePresets) {
+        if (adjustedFrom.isSame(preset.start, "day") && adjustedTo.isSame(preset.end, "day")) {
+            return preset.label;
+        }
+    }
+
+    return "Custom Range";
+  };
+
+  hasData(data: [] | {}) {
+    if (Array.isArray(data)) {
+        return data.length > 0;
+    } else if (typeof data === 'object' && data !== null) {
+        return Object.keys(data).length > 0;
+    }
+    return false;
   }
 
 }

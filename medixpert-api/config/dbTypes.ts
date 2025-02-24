@@ -10,7 +10,7 @@ export type Gender = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -28,7 +28,7 @@ export type Title = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -51,7 +51,7 @@ export type UsersLogin = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -84,7 +84,7 @@ export type Users = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -103,7 +103,7 @@ export type UsersRole = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -125,7 +125,7 @@ export type UsersAccess = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -145,7 +145,7 @@ export type MainPages = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -164,7 +164,7 @@ export type SubPages = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -183,7 +183,7 @@ export type SubModules = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -216,7 +216,7 @@ export type UsersOTP = {
         by: ObjectId;
         on: string;
         date: Date;
-    },
+    };
     verified: {
         by: ObjectId | null;
         on: string | null;
@@ -229,21 +229,21 @@ export type UsersAddress = {
     _id: ObjectId;
     userId: ObjectId;
     contact: {
-        mail: string | null,
-        mobile: number | null,
+        mail: string | null;
+        mobile: number | null;
     };
     address: {
         line1: string | null;
         line2: string | null;
         place: string | null; 
-        pin: number | null,
+        pin: number | null;
     };
     active: boolean;
     created: {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -264,7 +264,7 @@ export type Attachements = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | 'system' | null;
         on: string | null;
@@ -286,7 +286,7 @@ export type UsersQualification = {
         by: ObjectId;
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -304,7 +304,7 @@ export type SendMailAuth = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -332,7 +332,7 @@ export type ItemMaster = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -349,7 +349,7 @@ export type ItemType = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -366,7 +366,7 @@ export type ItemCategory = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -383,7 +383,7 @@ export type ItemQtyUnit = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -400,7 +400,7 @@ export type ItemCode = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -418,7 +418,7 @@ export type ItemRisk = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -480,7 +480,7 @@ export type Items = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -497,7 +497,7 @@ export type GenericNames = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -514,7 +514,7 @@ export type Branches = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -526,13 +526,13 @@ export type Branches = {
 export type Outlets = {
     _id: ObjectId;
     name: string;
-    branchId: ObjectId | null,
+    branchId: ObjectId | null;
     active: boolean;
     created: {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -544,13 +544,13 @@ export type Outlets = {
 export type PurchaseFormTypes = {
     _id: ObjectId;
     name: string;
-    branches: ObjectId[] | null,
+    branches: ObjectId[] | null;
     active: boolean;
     created: {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -562,13 +562,13 @@ export type PurchaseFormTypes = {
 export type PurchaseTypes = {
     _id: ObjectId;
     name: string;
-    branches: ObjectId[] | null,
+    branches: ObjectId[] | null;
     active: boolean;
     created: {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -602,7 +602,7 @@ export type PurchaseEntries = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -629,7 +629,7 @@ export type PurchaseEntryAmounts = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -672,7 +672,7 @@ export type PurchaseEntryItems = {
         by: ObjectId | 'system';
         on: string;
         date: Date;
-    },
+    };
     modified: {
         by: ObjectId | null;
         on: string | null;
@@ -739,19 +739,324 @@ export type ItemsStock = {
     margin: number;
     ptr: number;
     tax: {
-        taxId: ObjectId,
-        taxType: string,
-        taxValue: number,
-        inclusive: boolean,
-        subTaxes: [] | null,
-    },
+        taxId: ObjectId;
+        taxType: string;
+        taxValue: number;
+        inclusive: boolean;
+        subTaxes: [] | null;
+    };
     taxForFree: {
-        taxId: ObjectId,
-        taxType: string,
-        taxValue: number,
-        inclusive: boolean,
-        subTaxes: [] | null,
-    } | null,
+        taxId: ObjectId;
+        taxType: string;
+        taxValue: number;
+        inclusive: boolean;
+        subTaxes: [] | null;
+    } | null;
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//paymentTypes
+export type PaymentTypes = {
+    _id: ObjectId;
+    type: string;
+    name: string;
+    branches: ObjectId[] | null;
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//saleMaster
+export type SaleMaster = {
+    _id: ObjectId;
+    patientVisitId: ObjectId;
+    invoiceNo: string;
+    totalAmount: number;
+    discountAmount: number;
+    grandTotal: number;
+    roundedGrandTotal: number;
+    roundoffGrandTotal: number;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//saleItems
+export type SaleItems = {
+    _id: ObjectId;
+    saleMasterId: ObjectId;
+    itemId: ObjectId;
+    batchNo: string;
+    qty: number;
+    amount: number;
+    expiry: string;
+    hsnNo: string;
+    rackNo: string;
+    unit: string;
+    rate: number;
+    balanceStock: number;
+    tax: {
+        taxId: ObjectId;
+        taxType: string;
+        taxValue: number;
+        inclusive: boolean;
+        subTaxes: {
+            id: ObjectId;
+            name: string;
+            value: number;
+            type: string
+        }[]
+    };
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//salePatientMaster
+export type SalePatientMaster = {
+    _id: ObjectId;
+    patientId: number;
+    mobileCode: string;
+    mobileNo: number;
+    title: ObjectId;
+    fullName: string;
+    place: ObjectId;
+    gender: ObjectId;
+    doctor: ObjectId;
+    age: { years: number; months: number; days: number }
+    dob: Date;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//salePatientVisit
+export type SalePatientVisit = {
+    _id: ObjectId;
+    patientMasterId: ObjectId;
+    patientVisitId: number;
+    saleMasterId: ObjectId;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//saleInvoice
+export type SaleInvoice = {
+    _id: ObjectId;
+    saleMasterId: ObjectId;
+    html: string;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//doctors
+export type Doctors = {
+    _id: ObjectId;
+    title: ObjectId;
+    fullName: string;
+    qualification: string;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//places
+export type Places = {
+    _id: ObjectId;
+    name: string;
+    pin: number;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//billMaster
+export type BillMaster = {
+    _id: ObjectId;
+    saleMasterId: ObjectId;
+    billNo: string;
+    totalPaidAmount: number;
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//billDetails
+export type BillPaymentMode ={
+    mode: string;
+    amount: number;
+    transactionNo: string;
+    remarks: string;
+    isMain: boolean;
+}
+export type BillDetails = {
+    _id: ObjectId;
+    billMasterId: ObjectId;
+    paidAmount: number;
+    paymentModes: BillPaymentMode[];
+    branch: ObjectId;
+    outlet: ObjectId;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//saleBill
+export type SaleBill = {
+    _id: ObjectId;
+    billMasterId: ObjectId;
+    html: string;
+    active: boolean;
+    created: {
+        by: ObjectId;
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//pageSizes
+export type PageSizes = {
+    _id: ObjectId;
+    name: string;
+    height: {
+        value: number;
+        unit: string;
+    };
+    width: {
+        value: number;
+        unit: string;
+    };
+    default: 'p' | 'l';
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//replacingHashtags
+export type ReplacingHashtags = {
+    _id: ObjectId;
+    key: string;
+    value: string;
+    description: string;
     active: boolean;
     created: {
         by: ObjectId | 'system';

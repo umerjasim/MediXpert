@@ -6,6 +6,7 @@ class SaleStore {
     titles = [];
     genders = [];
     items = [];
+    paymentTypes = [];
 
     getMasterData = async () => {
         try {
@@ -14,6 +15,7 @@ class SaleStore {
                 runInAction(() => {
                     this.titles = response?.data?.titles;
                     this.genders = response?.data?.genders;
+                    this.paymentTypes = response?.data?.paymentTypes;
                 });
             }
             return Promise.resolve(null)
@@ -30,6 +32,28 @@ class SaleStore {
                     this.items = response?.data?.items;
                 });
                 return Promise.resolve(null);
+            }
+        } catch (error: any) {
+            return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
+        }
+    }
+
+    generateInvoice = async (data: any) => {
+        try {
+            const response = await saleService.generateInvoice(data);
+            if (response) {
+                return Promise.resolve(response);
+            }
+        } catch (error: any) {
+            return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));
+        }
+    }
+
+    confirmPayment = async (data: any) => {
+        try {
+            const response = await saleService.confirmPayment(data);
+            if (response) {
+                return Promise.resolve(response);
             }
         } catch (error: any) {
             return Promise.reject(error?.response?.data?.error?.message || i18n.t('defaultErrorMessage'));

@@ -139,7 +139,7 @@ function Suppliers() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.name === value,
+            // onFilter: (value, record) => record.name === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -158,7 +158,7 @@ function Suppliers() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.gst === value,
+            // onFilter: (value, record) => record.gst === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -176,7 +176,7 @@ function Suppliers() {
                 text: type, 
                 value: type
             })),
-            onFilter: (value, record) => record.licence === value,
+            // onFilter: (value, record) => record.licence === value,
             filterSearch: true,
             width: 130,
             ellipsis: true,
@@ -198,7 +198,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.mail === value,
+                    // onFilter: (value, record) => record.mail === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -216,7 +216,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.mobile === value,
+                    // onFilter: (value, record) => record.mobile === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -240,7 +240,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.line1 === value,
+                    // onFilter: (value, record) => record.line1 === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -258,7 +258,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.line2 === value,
+                    // onFilter: (value, record) => record.line2 === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -276,7 +276,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.place === value,
+                    // onFilter: (value, record) => record.place === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -294,7 +294,7 @@ function Suppliers() {
                         text: type, 
                         value: type
                     })),
-                    onFilter: (value, record) => record.pin === value,
+                    // onFilter: (value, record) => record.pin === value,
                     filterSearch: true,
                     width: 130,
                     ellipsis: true,
@@ -342,10 +342,10 @@ function Suppliers() {
                     value: branchName
                 }))
             ],
-            onFilter: (value, record) => {
-                const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
-                return hasBranch;
-            },
+            // onFilter: (value, record) => {
+            //     const hasBranch = record.branches && record.branches.some((branch: any) => branch === value);
+            //     return hasBranch;
+            // },
             width: 140,
             fixed: 'right'
         },
@@ -362,7 +362,7 @@ function Suppliers() {
                 { text: t('activeText'), value: true },
                 { text: t('inactiveText'), value: false },
             ],
-            onFilter: (value, record) => record.active === value,
+            // onFilter: (value, record) => record.active === value,
             filterSearch: true,
             width: 60,
             render: (value: any, record: any, index: number) => {

@@ -26,26 +26,42 @@ const generateRandomPassword = (length: number): string => {
 };
 
 function encrypt(text: string): string {
-    const algorithm = process.env.CRYPTO_ALGORITHM || cryptoAlgorithm;
-    const key = crypto.randomBytes(32);
-    const iv = crypto.randomBytes(16);
+  const algorithm = process.env.CRYPTO_ALGORITHM || cryptoAlgorithm;
+  const keyHex = process.env.CRYPTO_KEY!;
+  if (!keyHex) throw new Error("CRYPTO_KEY is not set in the environment variables.");
+  
+  const key = Buffer.from(keyHex, 'hex');
+  if (key.length !== 32) throw new Error("Invalid CRYPTO_KEY length. Must be 32 bytes (64 hex characters).");
 
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-    let encrypted = cipher.update(text, 'utf-8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
-};
+  const IV_LENGTH = 16;
+  const iv = crypto.randomBytes(IV_LENGTH);
+  
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(text, 'utf-8', 'base64');
+  encrypted += cipher.final('base64');
+  
+  return iv.toString('base64') + ':' + encrypted;
+}
 
 function decrypt(encryptedData: string): string {
-    const algorithm = process.env.CRYPTO_ALGORITHM || cryptoAlgorithm;
-    const key = crypto.randomBytes(32);
-    const [ivHex, encryptedText] = encryptedData.split(':');
-    const ivBuffer = Buffer.from(ivHex, 'hex');
-    const decipher = crypto.createDecipheriv(algorithm, key, ivBuffer);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf-8');
-    decrypted += decipher.final('utf-8');
-    return decrypted;
-};
+  const algorithm = process.env.CRYPTO_ALGORITHM || cryptoAlgorithm;
+  const keyHex = process.env.CRYPTO_KEY!;
+  if (!keyHex) throw new Error("CRYPTO_KEY is not set in the environment variables.");
+  
+  const key = Buffer.from(keyHex, 'hex');
+  if (key.length !== 32) throw new Error("Invalid CRYPTO_KEY length. Must be 32 bytes (64 hex characters).");
+
+  const [ivHex, encryptedText] = encryptedData.split(':');
+  if (!ivHex || !encryptedText) throw new Error("Invalid encrypted data format.");
+
+  const ivBuffer = Buffer.from(ivHex, 'base64');
+  const decipher = crypto.createDecipheriv(algorithm, key, ivBuffer);
+  
+  let decrypted = decipher.update(encryptedText, 'base64', 'utf-8');
+  decrypted += decipher.final('utf-8');
+  
+  return decrypted;
+}
 
 export async function sendVerificationCode(field: string, otp: string, email: string, name: string, language: string) {
     try {
@@ -248,9 +264,48 @@ function parseDate(
     : parsedDate.endOf('day').toDate();
 }
 
+function calculateDateOfBirth(
+  age: { 
+    years: number | null; 
+    months: number | null; 
+    days: number | null 
+  }
+): Date | null {
+  if (!age.years && !age.months && !age.days) {
+    return null;
+  }
+
+  const today = new Date();
+  let yearsToSubtract = age.years || 0;
+  let monthsToSubtract = age.months || 0;
+  let daysToSubtract = age.days || 0;
+
+  if (monthsToSubtract >= 12) {
+    yearsToSubtract += Math.floor(monthsToSubtract / 12);
+    monthsToSubtract %= 12;
+  }
+
+  const dob = new Date(today);
+
+  if (daysToSubtract) {
+    dob.setDate(today.getDate() - daysToSubtract);
+  }
+
+  if (monthsToSubtract) {
+    dob.setMonth(today.getMonth() - monthsToSubtract);
+  }
+
+  if (yearsToSubtract) {
+    dob.setFullYear(today.getFullYear() - yearsToSubtract);
+  }
+
+  return dob;
+}
+
 export { 
     generateRandomPassword,
     encrypt,
     decrypt,
-    parseDate
+    parseDate,
+    calculateDateOfBirth
 };

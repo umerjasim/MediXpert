@@ -599,3 +599,56 @@ body {
 .bill-card .ant-card-body {
     padding: 12px;
 }
+
+.dashboard-carousel .ant-card {
+    cursor: grab;
+    user-select: none;
+}
+
+.dashboard-carousel .ant-card {
+    cursor: grabbing;
+}
+
+.dashboard-card {
+    display: flex;
+    justify-content: center;
+}
+
+.responsive-card {
+    margin: 0px 10px;
+    /* width: 350px; */
+    /* max-width: 350px;
+    min-width: 200px; */
+    transition: all 0.3s ease-in-out;
+}
+
+.ant-picker-dropdown .ant-picker-panel-container .ant-picker-presets ul li +li {
+    margin-top: 5.3px;
+}
+
+/* .fully-paid-row {
+    background-color: #f6ffed;
+}
+
+.partially-paid-row {
+    background-color: #fffbe6;
+}
+
+.not-paid-row {
+    background-color: #fff2f0;
+} */
+
+/* .dashboard-visit-table-card .ant-card-body {
+    padding: 0;
+} */
+
+.jodit_theme_custom-dark {
+    --jd-color-background-default: #141414;
+    --jd-color-text-icons: #fff;
+    /* --jd-color-border: #141414; */
+    --jd-color-panel: #141414;
+    --jd-color-icon: #fff;
+    --jd-color-button-background-hover: #00274b;
+    --jd-color-button-background: #fff;
+}
+

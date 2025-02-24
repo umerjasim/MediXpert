@@ -1,4 +1,4 @@
-import { DatePicker, InputNumber, Space, TimeRangePickerProps, Tooltip } from "antd";
+import { DatePicker, Form, InputNumber, Space, TimeRangePickerProps, Tooltip } from "antd";
 import Constant from "../../Global/Constant";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
@@ -11,11 +11,15 @@ interface RangePickerProps {
         to: any
     },
     handleRangeSelection: (value: any) => void;
+    maxDate?: Dayjs | boolean;
+    minDate?: Dayjs | boolean;
 };
 
 const RangePicker: React.FC<RangePickerProps> = ({
     dateRange,
-    handleRangeSelection
+    handleRangeSelection,
+    maxDate = false,
+    minDate = false
 }) => {
 
     const [inputDays, setInputDays] = useState<number | undefined>(undefined);
@@ -42,15 +46,23 @@ const RangePicker: React.FC<RangePickerProps> = ({
 
             let newRange: [Dayjs, Dayjs] = [dayjs(), dayjs()];
             if (String(days).includes('-')) {
-                newRange = [
-                    dayjs(referenceDate).add(days, 'd').startOf('day'),
-                    dayjs(referenceDate).endOf('day')
-                ];
+                let fromDate = dayjs(referenceDate).add(days, 'd').startOf('day');
+                let toDate = dayjs(referenceDate).endOf('day');
+
+                if (dayjs.isDayjs(minDate) && fromDate.isBefore(minDate, 'day')) {
+                    fromDate = minDate.startOf('day');
+                }
+
+                newRange = [fromDate, toDate];
             } else {
-                newRange = [
-                    dayjs(referenceDate).startOf('day'),
-                    dayjs(referenceDate).add(days, 'd').endOf('day')
-                ];
+                let fromDate = dayjs(referenceDate).startOf('day');
+                let toDate = dayjs(referenceDate).add(days, 'd').endOf('day');
+
+                if (dayjs.isDayjs(maxDate) && toDate.isAfter(maxDate, 'day')) {
+                    toDate = maxDate.endOf('day');
+                }
+
+                newRange = [fromDate, toDate];
             }
     
             setSelectedRange(newRange);
@@ -71,41 +83,86 @@ const RangePicker: React.FC<RangePickerProps> = ({
 
     const rangePresets = [
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>Today</span>, 
-            value: [dayjs().startOf('day'), dayjs().endOf('day')] 
+            label: <span style={{ fontSize: 12 }}>Today</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().startOf('day'), 
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('day')
+                ] 
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>This Week</span>, 
-            value: [dayjs().startOf('week'), dayjs().endOf('week')] 
+            label: <span style={{ fontSize: 12 }}>Yesterday</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().add(-1, 'd').startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().add(-1, 'd').startOf('day'),
+                    (dayjs.isDayjs(maxDate) && dayjs().add(-1, 'd').endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().add(-1, 'd').endOf('day'),
+                ] 
+        },
+        { 
+            label: <span style={{ fontSize: 12 }}>This Week</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().startOf('week').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().startOf('week'), 
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('week').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('week')
+                ] 
         
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>This Month</span>,
-            value: [dayjs().startOf('month'), dayjs().endOf('month')]
+            label: <span style={{ fontSize: 12 }}>This Month</span>,
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().startOf('month').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().startOf('month'),
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('month').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('month')
+                ]
 
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>Last 7 Days</span>, 
-            value: [dayjs().add(-7, 'd'), dayjs()]
+            label: <span style={{ fontSize: 12 }}>Last 7 Days</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().add(-6, 'd').startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().add(-6, 'd').startOf('day'),
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('day')
+                ]
 
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>Last 14 Days</span>, 
-            value: [dayjs().add(-14, 'd'), dayjs()]
+            label: <span style={{ fontSize: 12 }}>Last 14 Days</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().add(-13, 'd').startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().add(-13, 'd').startOf('day'),
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('day')
+                ]
 
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>Last 30 Days</span>, 
-            value: [dayjs().add(-30, 'd'), dayjs()]
+            label: <span style={{ fontSize: 12 }}>Last 30 Days</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().add(-29, 'd').startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().add(-29, 'd').startOf('day'),
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('day')
+                ]
 
         },
         { 
-            label: <span style={{ fontWeight: 600, color: 'gray' }}>Last 90 Days</span>, 
-            value: [dayjs().add(-90, 'd'), dayjs()]
+            label: <span style={{ fontSize: 12 }}>Last 90 Days</span>, 
+            value: [
+                    (dayjs.isDayjs(minDate) && dayjs().add(-89, 'd').startOf('day').isBefore(minDate, 'day')) ? minDate.startOf('day') : dayjs().add(-89, 'd').startOf('day'),
+                    (dayjs.isDayjs(maxDate) && dayjs().endOf('day').isAfter(maxDate, 'day')) ? maxDate.endOf('day') : dayjs().endOf('day')
+                ]
 
         },
         {
             label: (
+                <Form.Item
+                    validateStatus={inputDays !== undefined && (
+                        (dayjs.isDayjs(maxDate) && inputDays > maxDate.diff(dayjs(), 'days')) ||
+                        (dayjs.isDayjs(minDate) && inputDays < minDate.diff(dayjs(), 'days'))
+                    ) ? "error" : ""}
+                    help={
+                        <span style={{ fontSize: 10 }}>
+                            {inputDays !== undefined && (
+                                (dayjs.isDayjs(maxDate) && inputDays > maxDate.diff(dayjs(), 'days')) 
+                                    ? t('maxError') + dayjs(maxDate).format('DD-MM-YYYY')
+                                : (dayjs.isDayjs(minDate) && inputDays < minDate.diff(dayjs(), 'days')) 
+                                    ? t('minError') + dayjs(minDate).format('DD-MM-YYYY')
+                                : null
+                            )}
+                        </span>
+                    }
+                >
                 <Space>
                     <InputNumber
                         size="small"
@@ -130,12 +187,17 @@ const RangePicker: React.FC<RangePickerProps> = ({
                             }
                         }}
                         value={inputDays}
+                        status={inputDays !== undefined && (
+                            (dayjs.isDayjs(maxDate) && inputDays > maxDate.diff(dayjs(), 'days')) ||
+                            (dayjs.isDayjs(minDate) && inputDays < minDate.diff(dayjs(), 'days'))
+                        ) ? "error" : ""}
                         onChange={handleCustomDaysChange}
                     />
                     <Tooltip title={t('customDatesTooltipText')}>
                         <InfoCircleOutlined />
                     </Tooltip>
                 </Space>
+                </Form.Item>
             ),
             value: selectedRange ?? [dayjs(), dayjs()],
         },
@@ -153,6 +215,16 @@ const RangePicker: React.FC<RangePickerProps> = ({
                 onCalendarChange={handleDateSelection}
                 placeholder={[t('fromText'), t('toText')]}
                 onClick={() => setInputDays(undefined)}
+                disabledDate={(current) => {
+                    if (dayjs.isDayjs(maxDate) && current.isAfter(maxDate, 'day')) {
+                        return true;
+                    }
+                    if (dayjs.isDayjs(minDate) && current.isBefore(minDate, 'day')) {
+                        return true;
+                    }
+                    return false;
+                }}
+
             />
         </>
     );

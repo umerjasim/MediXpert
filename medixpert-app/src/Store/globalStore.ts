@@ -9,6 +9,7 @@ export type globalStoreProps = {
   collapse: boolean;
   darkTheme: boolean; 
   language: string;
+  settingDrawerOpen: boolean;
   setLoading: (loading: boolean) => any,
   setPages: (pages: Array<object> | any) => any,
   setUser: (user: object) => any,
@@ -17,6 +18,7 @@ export type globalStoreProps = {
   setCollapse: (collapse: boolean) => any,
   setDarkTheme: (darkTheme: boolean) => any,
   setLanguage: (language: string) => any,
+  setSettingDrawerOpen: (drawer: boolean) => any,
 }
 
 class GlobalStore {
@@ -35,6 +37,7 @@ class GlobalStore {
   collapse = localStorage.getItem('mx-sideCollapse') === 'true';
   darkTheme = localStorage.getItem('mx-darkMode') === 'true';
   language = localStorage.getItem('mx-language') || 'en';
+  settingDrawerOpen = false;
 
   setLoading(loading: boolean) {
     this.loading = loading;
@@ -68,6 +71,10 @@ class GlobalStore {
     this.language = language;
   }
 
+  setSettingDrawerOpen(drawer: boolean) {
+    this.settingDrawerOpen = drawer;
+  }
+
   constructor() {
     makeObservable(this, {
       loading: observable,
@@ -86,6 +93,8 @@ class GlobalStore {
       setDarkTheme: action,
       language: observable,
       setLanguage: action,
+      settingDrawerOpen: observable,
+      setSettingDrawerOpen: action,
     });
   }
 }

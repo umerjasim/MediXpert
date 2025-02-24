@@ -9,7 +9,8 @@ import {
     BookOutlined,
     DiffOutlined,
     SwapOutlined,
-    FileDoneOutlined
+    FileDoneOutlined,
+    TagsOutlined
 } from "@ant-design/icons";
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 
@@ -25,7 +26,8 @@ const Icons: { [key: string]: React.FC } = {
     BookOutlined,
     DiffOutlined,
     SwapOutlined,
-    FileDoneOutlined
+    FileDoneOutlined,
+    TagsOutlined
 };
 
 export default Icons;

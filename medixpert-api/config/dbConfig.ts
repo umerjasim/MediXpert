@@ -78,6 +78,8 @@ export const dbHandler = async (
             return { insertedId: result.insertedId };
           }
         }
+        case 'countDocuments':
+          return await collection.countDocuments(query);
         default:
           throw new Error(`Unknown operation: ${operation}`);
       }
@@ -86,3 +88,5 @@ export const dbHandler = async (
       throw err;
     }
 };
+
+export { client };

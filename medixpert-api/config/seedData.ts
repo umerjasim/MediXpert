@@ -2,7 +2,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
 import { Branches, Gender, ItemCategory, ItemCode, ItemMaster, 
-    ItemQtyUnit, ItemType, MainPages, Outlets, PurchaseFormTypes, 
+    ItemQtyUnit, ItemType, MainPages, Outlets, PageSizes, PaymentTypes, PurchaseFormTypes, 
     PurchaseTypes, SendMailAuth, Title, Users, UsersAccess, UsersLogin, 
     UsersRole } from './dbTypes';
 import { genders } from './seed-data/genders';
@@ -29,6 +29,8 @@ import { outlets } from './seed-data/outlets';
 import { usersAccess } from './seed-data/usersAccess';
 import { purchaseFormTypes } from './seed-data/purchaseFormTypes';
 import { purchaseTypes } from './seed-data/purchaseTypes';
+import { paymentTypes } from './seed-data/paymentTypes';
+import { pageSizes } from './seed-data/pageSizes';
 
 dotenv.config();
 
@@ -284,6 +286,26 @@ async function seedDatabase(): Promise<void> {
         await purchaseTypesCollection.insertMany(updatedPurchaseTypes);
         console.log('Inserted purchase types into the collection');
         //End :: purchaseTypes
+
+        //Start :: paymentTypes
+        const updatedPaymentTypes = paymentTypes.map((type, index) => ({
+            ...type,
+            branches: insertedBranchIds,
+        }));
+        const paymentTypesCollection = db.collection<PaymentTypes>(collectionNames.paymentTypes);
+        await paymentTypesCollection.drop().catch(() => console.log("paymentTypes collection doesn't exist, creating new one"));
+
+        await paymentTypesCollection.insertMany(updatedPaymentTypes);
+        console.log('Inserted payment types into the collection');
+        //End :: paymentTypes
+
+        //Start :: page sizes
+        const pageSizesCollection = db.collection<PageSizes>(collectionNames.pageSizes);
+        await pageSizesCollection.drop().catch(() => console.log("pageSizes collection doesn't exist, creating new one"));
+
+        await pageSizesCollection.insertMany(pageSizes);
+        console.log('Inserted page sizes into the collection');
+        //End :: page sizes
 
     } catch (err) {
         logger.error(err?.stack)
