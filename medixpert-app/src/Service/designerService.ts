@@ -9,6 +9,11 @@ class DesignerService {
         return api.get(url);
     }
 
+    saveContent = async (data: any[]) => {
+        const url = `/designer/saveContent`;
+        return api.post(url, data);
+    }
+
 }
 
 export default new DesignerService();

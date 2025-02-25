@@ -478,5 +478,6 @@
     "editorDisabledWarning": "The editor is currently disabled for editing or typing. To start creating or editing, you must first select a page size and orientation, then click 'Create Page'. After that, the editor box will be enabled with the selected page size.",
     "clickToStartText": "Click to start...",
     "selectPageSizeText": "Select Page Size",
-    "selectOrientationText": "Select Orientation"
+    "selectOrientationText": "Select Orientation",
+    "contentEmpty": "Content cannot be empty!"
 }

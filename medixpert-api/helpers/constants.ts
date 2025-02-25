@@ -86,6 +86,10 @@ export const msg = {
     code: 116,
     message: 'Tax already exist. Please enter different name.',
   },
+  docNameAlreadyExist: {
+    code: 117,
+    message: 'Given already exist. Please enter different name.',
+  },
 };
 
 export const requestCode = {
@@ -164,7 +168,9 @@ export const collectionNames = {
     billDetails: 'billDetails',
     saleBill: 'saleBill',
     pageSizes: 'pageSizes',
-    replacingHashtags: 'replacingHashtags'
+    replacingHashtags: 'replacingHashtags',
+    documentTypes: 'documentTypes',
+    documentMaster: 'documentMaster'
 };
 
 export const numberKeyWords = {

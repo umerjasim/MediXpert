@@ -2,18 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { inject, observer } from 'mobx-react';
 import globalStore from '../../../Store/globalStore';
-import { Alert, Button, Card, Col, Form, Row, Select, Tooltip } from 'antd';
+import { Alert, Button, Card, Col, Dropdown, Form, Input, MenuProps, Row, Select, Space, Tooltip } from 'antd';
 import { t } from 'i18next';
 import Utility from '../../../Global/Utility';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import Notification from '../../../Global/Notification';
 import Marquee from 'react-fast-marquee';
+import ConfirmModal from '../../../Components/ConfirmModal';
+import designerStore from '../../../Store/designerStore';
 
 const EditorBox: React.FC<{
     pageSizes: any[];
-    hashtags: any[]
-}> = ({ pageSizes, hashtags }) => {
+    hashtags: any[];
+    documentTypes: any[];
+    documentMaster: any[];
+}> = ({ pageSizes, hashtags, documentTypes, documentMaster }) => {
     const [pageSettingForm] = Form.useForm();
+    const [confirmForm] = Form.useForm();
     const [editorContent, setEditorContent] = useState<string>('');
     const [editorKey, setEditorKey] = useState<string>(Date.now().toString());
     const [editorInstance, setEditorInstance] = useState<any>(null);
@@ -22,13 +27,24 @@ const EditorBox: React.FC<{
         width: {
             value: number;
             unit: string
-        }; height: {
+        }; 
+        height: {
             value: number;
             unit: string
         }; 
     } | null>(null);
     const [selectedOrientation, setSelectedOrientation] = useState<'p' | 'l' | null>(null);
     const [editorDisabled, setEditorDisabled] = useState<boolean>(true);
+    const [saveButtonProp, setSaveButtonProp] = useState<{ confirm: boolean; disable: boolean; error: boolean }>({
+        confirm: false,
+        disable: true,
+        error: false,
+    });
+    const [documentTypeData, setDocumentTypeData] = useState<{ type: string | null; name: string; }>({
+        type: null,
+        name: ''
+    });
+    const [selectedContentId, setSelectedContentId] = useState<string>('');
 
     useEffect(() => {
         const savedContent = editorContent;
@@ -193,74 +209,14 @@ const EditorBox: React.FC<{
                                 {
                                     type: 'htmlpanel',
                                     html: `
-                                        <div>
+                                        <div style="position: sticky; top: -16px;">
                                             <input type="text" class="tox-textfield" 
                                                 placeholder="${t('searchText')}"
                                                 style="width: 100%; margin-bottom: 8px; padding: 5px;"
                                                 id="hashtag-search"
                                             />
                                         </div>
-                                        <div id="hashtag-container" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px;">
-                                            ${hashtags?.map(hashtag => `
-                                                <div 
-                                                    class="hashtag-item"
-                                                    data-id="${hashtag._id}"
-                                                    data-name="${hashtag.key}"
-                                                    data-key="${hashtag.key.toLowerCase()}"
-                                                    data-value="${hashtag.value.toLowerCase()}"
-                                                    style="background:${globalStore.darkTheme ? '#1d1d1d' : '#fafafa'}; 
-                                                        padding: 4px 8px; border: 1px solid ${globalStore.darkTheme ? '#424242' : '#d9d9d9'}; 
-                                                        color:${globalStore.darkTheme ? '#c3c3c3' : '#262626'}; border-radius: 5px; cursor: pointer;
-                                                        opacity: 1; transition: opacity 0.3s ease-in-out;"
-                                                >
-                                                    <span class="hashtag-text">${hashtag.key}</span>
-                                                </div>
-                                            `).join('')}
-                                            ${hashtags?.map(hashtag => `
-                                                <div 
-                                                    class="hashtag-item"
-                                                    data-id="${hashtag._id}"
-                                                    data-name="${hashtag.key}"
-                                                    data-key="${hashtag.key.toLowerCase()}"
-                                                    data-value="${hashtag.value.toLowerCase()}"
-                                                    style="background:${globalStore.darkTheme ? '#1d1d1d' : '#fafafa'}; 
-                                                        padding: 4px 8px; border: 1px solid ${globalStore.darkTheme ? '#424242' : '#d9d9d9'}; 
-                                                        color:${globalStore.darkTheme ? '#c3c3c3' : '#262626'}; border-radius: 5px; cursor: pointer;
-                                                        opacity: 1; transition: opacity 0.3s ease-in-out;"
-                                                >
-                                                    <span class="hashtag-text">${hashtag.key}</span>
-                                                </div>
-                                            `).join('')}
-                                            ${hashtags?.map(hashtag => `
-                                                <div 
-                                                    class="hashtag-item"
-                                                    data-id="${hashtag._id}"
-                                                    data-name="${hashtag.key}"
-                                                    data-key="${hashtag.key.toLowerCase()}"
-                                                    data-value="${hashtag.value.toLowerCase()}"
-                                                    style="background:${globalStore.darkTheme ? '#1d1d1d' : '#fafafa'}; 
-                                                        padding: 4px 8px; border: 1px solid ${globalStore.darkTheme ? '#424242' : '#d9d9d9'}; 
-                                                        color:${globalStore.darkTheme ? '#c3c3c3' : '#262626'}; border-radius: 5px; cursor: pointer;
-                                                        opacity: 1; transition: opacity 0.3s ease-in-out;"
-                                                >
-                                                    <span class="hashtag-text">${hashtag.key}</span>
-                                                </div>
-                                            `).join('')}
-                                            ${hashtags?.map(hashtag => `
-                                                <div 
-                                                    class="hashtag-item"
-                                                    data-id="${hashtag._id}"
-                                                    data-name="${hashtag.key}"
-                                                    data-key="${hashtag.key.toLowerCase()}"
-                                                    data-value="${hashtag.value.toLowerCase()}"
-                                                    style="background:${globalStore.darkTheme ? '#1d1d1d' : '#fafafa'}; 
-                                                        padding: 4px 8px; border: 1px solid ${globalStore.darkTheme ? '#424242' : '#d9d9d9'}; 
-                                                        color:${globalStore.darkTheme ? '#c3c3c3' : '#262626'}; border-radius: 5px; cursor: pointer;
-                                                        opacity: 1; transition: opacity 0.3s ease-in-out;"
-                                                >
-                                                    <span class="hashtag-text">${hashtag.key}</span>
-                                                </div>
-                                            `).join('')}
+                                        <div id="hashtag-container" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; max-height:400px;">
                                             ${hashtags?.map(hashtag => `
                                                 <div 
                                                     class="hashtag-item"
@@ -473,7 +429,24 @@ const EditorBox: React.FC<{
     };
 
     const handleSave = () => {
-        console.log('Saved Content:', editorContent);
+        if (!editorContent) {
+            setSaveButtonProp((prev: any) => ({...prev, error: true}));
+            return;
+        }
+        setSaveButtonProp((prev: any) => ({...prev, confirm: true}));
+    };
+
+    const handleUpdate = () => {
+        if (!editorContent) {
+            setSaveButtonProp((prev: any) => ({...prev, error: true}));
+            return;
+        }
+        const selectedContent = documentMaster.find(doc => doc._id === selectedContentId);
+        console.log(selectedContent)
+        setDocumentTypeData({ type: selectedContent.documentTypes._id, name: selectedContent.name });
+        confirmForm.setFieldsValue({ 'form-editor-confirm-type': selectedContent?.documentTypes?._id });
+        confirmForm.setFieldsValue({ 'form-editor-confirm-name': selectedContent?.name });
+        setSaveButtonProp((prev: any) => ({...prev, confirm: true}));
     };
 
     const handlePageSizeChange = (value: string) => {
@@ -511,16 +484,180 @@ const EditorBox: React.FC<{
             }
             
             setEditorDisabled(false);
+            setSaveButtonProp((prev: any) => ({...prev, disable: false}));
         } catch (errorInfo) {
             Notification.error({
                 message: t('error'),
                 description: t('fillRequiredFields')
             });
         }
-    };    
+    };
+
+    const handleConfirm = async () => {
+        globalStore.setLoading(true);
+        try {
+            const values = await confirmForm.validateFields();
+            if (values) {
+                const data = { 
+                    contentId: selectedContentId || null,
+                    content: editorContent, 
+                    type: values['form-editor-confirm-type'],
+                    name: values['form-editor-confirm-name'],
+                    pageType: selectedPageSizes?.id,
+                    orientation: selectedOrientation
+                }
+                await designerStore.saveContent(data);
+
+                Notification.success({
+                    message: t('success'),
+                    description: t('savedSuccessfully')
+                });
+                
+                setTimeout(() => {
+                    setEditorContent('');
+                    setEditorKey(Date.now().toString());
+                    setEditorInstance(null);
+                    setSelectedPageSizes(null);
+                    setSelectedOrientation(null);
+                    setEditorDisabled(true);
+                    setDocumentTypeData({
+                        type: null,
+                        name: ''
+                    });
+                    setSaveButtonProp({
+                        confirm: false,
+                        disable: true,
+                        error: false,
+                    });
+                }, 500);
+            }
+        } catch (error) {
+            Notification.error({
+                message: t('error'),
+                description: t('fillRequiredFields')
+            });
+        } finally {
+            setTimeout(() => {
+                globalStore.setLoading(false);
+            }, 500);
+        }
+    };
+
+    const handleInsert: MenuProps['onClick'] = (e) => {
+        const contentId = e.key;
+        const selectedContent = documentMaster.find(doc => doc._id === contentId);
+        setEditorContent(selectedContent?.contentHtml || '');
+        setSelectedContentId(contentId);
+        setSelectedPageSizes({
+            id: selectedContent?.pageType?._id,
+            width: selectedContent?.pageType?.width,
+            height: selectedContent?.pageType?.height
+        });
+        setSelectedOrientation(selectedContent.orientation);
+        pageSettingForm.setFieldsValue({ 'page-setting-size': selectedContent?.pageType?._id });
+        pageSettingForm.setFieldsValue({ 'page-setting-orientation': selectedContent?.orientation });
+
+        const height: string = selectedContent?.pageType?.height.value + '' + selectedContent?.pageType?.height.unit;
+        const width: string = selectedContent?.pageType?.width.value + '' + selectedContent?.pageType?.width.unit;
+        if (selectedContent.orientation === 'l') {
+            setEditorSize(height, width);
+        } else {
+            setEditorSize(width, height);
+        }
+        setSaveButtonProp((prev: any) => ({...prev, disable: false}));
+    };
+
+    const docMasterItems: MenuProps['items'] = documentMaster.map((doc) => ({
+        key: doc._id,
+        label: doc.name,
+        onClick: handleInsert
+    }));
 
     return (
         <div>
+            <ConfirmModal
+                title={t('confirmText')}
+                content={
+                    <>
+                        <Form
+                            form={confirmForm}
+                            name='form-editor-confirm'
+                            id='form-editor-confirm'
+                            initialValues={{ remember: true }}
+                            autoComplete="off"
+                            onKeyDown={(event) => Utility.handleEnterKey(event, 'form-editor-confirm')}
+                            layout="vertical"
+                        >
+                            <Row gutter={[16, 4]} >
+                                <Col lg={24} md={24} sm={24} xs={24}>
+                                    <Form.Item
+                                        label={
+                                            <>
+                                                {t('documentTypeText')}
+                                                <Tooltip placement="top" 
+                                                title={t('documentTypeSelectionTooltipText')}>
+                                                    <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                                                </Tooltip>
+                                            </>
+                                        }
+                                        name="form-editor-confirm-type"
+                                        id="form-editor-confirm-type"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('documentTypeEmpty'),
+                                            },
+                                        ]}
+                                    >
+                                        <Select 
+                                        placeholder={t('selectDocumentTypeText')} 
+                                        // defaultValue={documentTypeData.type ? documentTypeData.type : (documentTypes?.[0]?._id || undefined)}
+                                        onChange={(val: any) => setDocumentTypeData((prev) => ({ ...prev, type: val }))}
+                                        value={documentTypeData.type || undefined}
+                                        >
+                                            {documentTypes.map((doc) => (
+                                                <Select.Option key={doc._id} value={doc._id}>
+                                                    {doc.name}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                                <Col lg={24} md={24} sm={24} xs={24}>
+                                    <Form.Item
+                                        label={
+                                            <>
+                                                {t('documentNameText')}
+                                                <Tooltip placement="top" 
+                                                title={t('documentNameTooltipText')}>
+                                                    <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                                                </Tooltip>
+                                            </>
+                                        }
+                                        name="form-editor-confirm-name"
+                                        id="form-editor-confirm-name"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('documentNameEmpty'),
+                                            },
+                                        ]}
+                                    >
+                                       <Input 
+                                       placeholder={t('documentNameText')}
+                                       onChange={(val: any) => setDocumentTypeData((prev) => ({ ...prev, name: val }))}
+                                       value={documentTypeData.name}
+                                       />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>
+                    </>
+                }
+                visible={saveButtonProp.confirm}
+                onOk={handleConfirm}
+                onCancel={() => setSaveButtonProp((prev: any) => ({...prev, confirm: false}))}
+            />
             <Card
             title={t('editorText')}
             >
@@ -529,14 +666,12 @@ const EditorBox: React.FC<{
                     name='form-page-setting'
                     id='form-page-setting'
                     initialValues={{ remember: true }}
-                    // onFinish={onFinish}
-                    // onFinishFailed={onFinishFailed}
                     autoComplete="off"
                     onKeyDown={(event) => Utility.handleEnterKey(event, 'form-page-setting')}
-                    layout="vertical"
+                    // layout="vertical"
                 >
                     <Row gutter={[16, 4]} >
-                        <Col lg={4} md={4} sm={4} xs={4}>
+                        <Col lg={6} md={6} sm={24} xs={24}>
                             <Form.Item
                                 label={
                                     <>
@@ -569,7 +704,7 @@ const EditorBox: React.FC<{
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col lg={4} md={4} sm={4} xs={4}>
+                        <Col lg={6} md={6} sm={24} xs={24}>
                             <Form.Item
                                 label={
                                     <>
@@ -604,11 +739,11 @@ const EditorBox: React.FC<{
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col lg={2} md={2} sm={2} xs={2}>
+                        <Col lg={3} md={3} sm={24} xs={24}>
                             <Form.Item
                                 id="page-setting-apply"
                                 name="page-setting-apply"
-                                label="&nbsp;"
+                                // label="&nbsp;"
                             >
                                 <Button 
                                 color="primary" 
@@ -620,6 +755,17 @@ const EditorBox: React.FC<{
                                     {t('createPageText')}
                                 </Button>
                             </Form.Item>
+                        </Col>
+                        <Col lg={6} md={6} sm={24} xs={24}></Col>
+                        <Col lg={3} md={3} sm={24} xs={24}>
+                            <Dropdown menu={{ items: docMasterItems }} trigger={['click']}>
+                                <Button block>
+                                    <Space>
+                                        {t('insertSavedText')}
+                                        <DownOutlined />
+                                    </Space>
+                                </Button>
+                            </Dropdown>
                         </Col>
                     </Row>
                 </Form>
@@ -647,7 +793,7 @@ const EditorBox: React.FC<{
                         script_url: '/TinyMCE/tinymce.min.js',
                         // disabled: true,
                         disable: 'tracking',
-                        height: 600,
+                        height: 500,
                         // menubar: 'file edit view insert format tools table pagebreak help',
                         menubar: false,
                         plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
@@ -683,8 +829,55 @@ const EditorBox: React.FC<{
                         placeholder: t('clickToStartText')
                     }}
                 />
+                <Form.Item
+                    id="editor-save"
+                    name="editor-save"
+                    style={{ marginBottom: 0 }}
+                    validateStatus={saveButtonProp.error ? "error" : ""}
+                    help={saveButtonProp.error ? t('contentEmpty') : ""}
+                >
+                    <Row style={{ marginTop: 10 }} gutter={24}>  
+                        {selectedContentId ? (
+                            <>
+                                <Col lg={12} md={12} sm={12} xs={12}>
+                                    <Button 
+                                    color="primary" 
+                                    variant="dashed"
+                                    block
+                                    onClick={handleUpdate}
+                                    disabled={saveButtonProp.disable}
+                                    >
+                                        {t('updateExistingText')}
+                                    </Button>
+                                </Col>
+                                <Col lg={12} md={12} sm={12} xs={12}>
+                                    <Button 
+                                    color="primary" 
+                                    variant="solid"
+                                    block
+                                    onClick={handleSave}
+                                    disabled={saveButtonProp.disable}
+                                    >
+                                        {t('saveAsNewText')}
+                                    </Button>
+                                </Col>
+                            </>
+                        ) : (
+                            <Col lg={24} md={24} sm={24} xs={24}>
+                                <Button 
+                                color="primary" 
+                                variant="solid"
+                                block
+                                onClick={handleSave}
+                                disabled={saveButtonProp.disable}
+                                >
+                                    {t('saveText')}
+                                </Button>
+                            </Col>
+                        )}
+                    </Row>
+                </Form.Item>
             </Card>
-        <button onClick={handleSave}>Save Invoice</button>
         </div>
     );
 };

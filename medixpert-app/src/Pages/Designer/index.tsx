@@ -10,6 +10,8 @@ const Designer: React.FC = () => {
 
     const [pageSizes, setPageSizes] = useState<any[]>([]);
     const [hashtags, sethashtags] = useState<any[]>([]);
+    const [documentTypes, setDocumentTypes] = useState<any[]>([]);
+    const [documentMaster, setDocumentMaster] = useState<any[]>([]);
 
     useEffect(() => {
         getData();
@@ -21,6 +23,9 @@ const Designer: React.FC = () => {
             await designerStore.getData();
             setPageSizes(designerStore.pageSizes);
             sethashtags(designerStore.hashtags);
+            setDocumentTypes(designerStore.documentTypes);
+            setDocumentMaster(designerStore.documentMaster);
+            console.log(designerStore.documentMaster)
         } catch (error) {
             Notification.error({
                 message: t('error'),
@@ -35,7 +40,7 @@ const Designer: React.FC = () => {
 
     return (
         <div>
-            <Editor pageSizes={pageSizes} hashtags={hashtags} />
+            <Editor pageSizes={pageSizes} hashtags={hashtags} documentTypes={documentTypes} documentMaster={documentMaster} />
         </div>
     );
 };

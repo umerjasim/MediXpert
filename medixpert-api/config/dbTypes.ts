@@ -1069,3 +1069,42 @@ export type ReplacingHashtags = {
         date: Date | null;
     }
 }
+
+//documentTypes
+export type DocumentTypes = {
+    _id: ObjectId;
+    name: string;
+    value: string;
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
+
+//documentMaster
+export type DocumentMaster = {
+    _id: ObjectId;
+    docType: ObjectId;
+    name: string;
+    contentHtml: string;
+    pageType: ObjectId;
+    orientation: 'p' | 'l';
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
