@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  backend:
+    build: ./medixpert-api
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./medixpert-api/.env.production
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./medixpert-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./medixpert-app/.env
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo
+    container_name: mongodb_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
