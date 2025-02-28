@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "prestart": "npm run build",
     "start": "node dist/app.js",
     "build": "tsc",
     "dev": "dotenv -e .env.development nodemon --exec ts-node index.ts",
