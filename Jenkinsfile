@@ -6,7 +6,7 @@ pipeline {
         BACKEND_IMAGE = "umerjasim/medixpert-api"
         FRONTEND_IMAGE = "umerjasim/medixpert-app"
         RAILWAY_API_URL = "https://api.railway.app/project/YOUR_PROJECT_ID/deploy"
-        RAILWAY_API_TOKEN = "YOUR_RAILWAY_API_TOKEN"
+        RAILWAY_API_TOKEN = "60132630-82fb-41b9-98fb-320e60332e11"
     }
 
     stages {
