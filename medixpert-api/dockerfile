@@ -19,5 +19,5 @@ RUN npm run build
 # Expose port (Make sure this matches your Express app)
 EXPOSE 8500
 
-# Start the application and seed the database only if SEED_DB=true
+RUN npm run build  # This compiles TypeScript
 CMD ["sh", "-c", "if [ \"$SEED_DB\" = \"true\" ]; then npm run seed:prod; fi && npm start"]

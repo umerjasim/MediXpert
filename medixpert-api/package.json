@@ -8,7 +8,7 @@
     "build": "tsc",
     "dev": "npx dotenv -e .env.development nodemon --exec ts-node index.ts",
     "seed:dev": "npx dotenv -e .env.development -- nodemon --exec ts-node config/seedData.ts",
-    "seed:prod": "npx dotenv -e .env.production -- ts-node config/seedData.ts"
+    "seed:prod": "node dist/config/seedData.js"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
