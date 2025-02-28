@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prestart": "npm run build",
-    "start": "node dist/app.js",
+    "start": "NODE_OPTIONS='--max-old-space-size=1024' node dist/app.js",
     "build": "tsc",
     "dev": "dotenv -e .env.development nodemon --exec ts-node index.ts",
     "seed:dev": "dotenv -e .env.development -- nodemon --exec ts-node config/seedData.ts",
