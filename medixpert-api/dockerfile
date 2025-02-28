@@ -10,14 +10,17 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the project files
+# Remove any existing build
+RUN rm -rf dist/
+
+# Copy the rest of the project files (excluding dist)
 COPY . .
 
-# Compile TypeScript (Generates `dist/`)
-RUN npm run build
+# Compile TypeScript
+RUN npm run build  # This compiles TypeScript
 
-# Expose port (Make sure this matches your Express app)
+# Expose port
 EXPOSE 8500
 
-RUN npm run build  # This compiles TypeScript
+# Start the application
 CMD ["sh", "-c", "if [ \"$SEED_DB\" = \"true\" ]; then npm run seed:prod; fi && npm start"]

@@ -12,14 +12,15 @@
       "module": "commonJS",
       "target": "es2018",
       "isolatedModules": true,
-      "outDir": "dist",
+      "outDir": "./dist",
+      "rootDir": "./",
       "skipLibCheck": true,
-      "typeRoots": ["./node_modules/@types", "./@types"]
+      "typeRoots": ["./node_modules/@types", "./@types"],
   },
   "include": [
       "**/*",
   ],
   "exclude": [
       "node_modules"
-  ]
+  ],
 }

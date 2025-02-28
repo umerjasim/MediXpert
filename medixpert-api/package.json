@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/app.js",
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
     "dev": "npx dotenv -e .env.development nodemon --exec ts-node index.ts",
     "seed:dev": "npx dotenv -e .env.development -- nodemon --exec ts-node config/seedData.ts",
     "seed:prod": "node dist/config/seedData.js"
