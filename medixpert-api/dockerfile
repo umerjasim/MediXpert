@@ -16,11 +16,8 @@ COPY . .
 # Compile TypeScript (Generates `dist/`)
 RUN npm run build
 
-# Seed database (Optional, remove if not needed)
-RUN npm run seed:prod
-
 # Expose port (Make sure this matches your Express app)
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application and seed the database only if SEED_DB=true
+CMD ["sh", "-c", "if [ \"$SEED_DB\" = \"true\" ]; then npm run seed:prod; fi && npm start"]
