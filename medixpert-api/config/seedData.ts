@@ -331,6 +331,8 @@ const sendAdminMail = async (username: string, password: string) => {
             return false;
         }
     }
+    console.log(data)
+    console.log(templatesFilePath)
     if (data) {
         const mailBody = data.toString()
             .replace('[app-url]', appUrl)

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+      "incremental": true,
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,
@@ -21,6 +22,6 @@
       "**/*",
   ],
   "exclude": [
-      "node_modules"
+      "node_modules", "dist"
   ],
 }

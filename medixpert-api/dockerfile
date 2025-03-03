@@ -1,29 +1,26 @@
+# Limit memory usage to prevent Render from killing the process
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
 # Use official Node.js image
 FROM node:18-alpine
 
-# Set working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy only package.json and lock file first (for better caching)
+# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install --frozen-lockfile
+RUN npm install --omit=dev  # ✅ Install only production dependencies
 
-# Remove old build if it exists
+# Remove any existing build
 RUN rm -rf dist/
 
 # Copy the rest of the project files (excluding dist)
 COPY . .
 
-# Ensure `dist/` exists
-RUN mkdir -p dist
-
-# Compile TypeScript
-RUN npm run build
-
-# Verify that the build is successful
-RUN ls -l dist/
+# Compile TypeScript with limited memory
+RUN npm run build  
 
 # Expose port
 EXPOSE 8500
