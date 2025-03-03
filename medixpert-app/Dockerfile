@@ -4,11 +4,11 @@ FROM node:18
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and yarn.lock
+# Copy package.json and yarn.lock first (to leverage Docker caching)
 COPY package.json yarn.lock ./
 
 # Install dependencies
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the project files
 COPY . .
@@ -16,8 +16,11 @@ COPY . .
 # Build the frontend
 RUN yarn build
 
-# Expose the port
-EXPOSE 3000
+# Install `serve` globally to serve the production build
+RUN yarn global add serve
 
-# Serve the frontend using a lightweight server
-CMD ["yarn", "start"]
+# Expose the port Render will use
+EXPOSE 10000
+
+# Serve the built frontend using `serve`
+CMD ["serve", "-s", "build", "-l", "10000"]
