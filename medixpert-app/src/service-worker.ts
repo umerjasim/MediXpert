@@ -21,12 +21,12 @@ declare var self: ServiceWorkerGlobalScope & {
 // Let Workbox handle __WB_MANIFEST automatically
 clientsClaim();
 
-// Only precache when __WB_MANIFEST is available (only in production)
-if (typeof self.__WB_MANIFEST !== 'undefined' && Array.isArray(self.__WB_MANIFEST)) {
+// Workbox will inject __WB_MANIFEST during the build process
+// if (Array.isArray(self.__WB_MANIFEST)) {
   precacheAndRoute(self.__WB_MANIFEST);
-} else {
-  console.warn('Workbox: __WB_MANIFEST is not available. Skipping precaching.');
-}
+// } else {
+//   console.error("Error: __WB_MANIFEST is not an array");
+// }
 
 // Example runtime caching rule
 self.addEventListener('fetch', (event) => {
