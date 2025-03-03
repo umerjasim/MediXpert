@@ -1,7 +1,0 @@
-{
-    "inactiveUser": "User not active!",
-    "invalidLogin": "Invalid sign-in credentials.",
-    "unknownError": "Something went wrong. Please try again later.",
-    "noAnyAccess": "User does not have any access. Please contact your manager.",
-    "forbidden": "Permission denied."
-}

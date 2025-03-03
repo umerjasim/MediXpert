@@ -37,9 +37,6 @@ dotenv.config();
 const url = process.env.DB_URL as string;
 const dbName = process.env.DB_NAME as string;
 
-console.log(url);
-console.log(dbName);
-
 async function seedDatabase(): Promise<void> {
     const client = new MongoClient(url);
 
