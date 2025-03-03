@@ -11,7 +11,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Remove any existing build
-RUN rm -rf dist/
+#RUN rm -rf dist/
 
 # Copy the rest of the project files (excluding dist)
 COPY . .
