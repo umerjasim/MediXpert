@@ -479,5 +479,18 @@
     "clickToStartText": "Click to start...",
     "selectPageSizeText": "Select Page Size",
     "selectOrientationText": "Select Orientation",
-    "contentEmpty": "Content cannot be empty!"
+    "contentEmpty": "Content cannot be empty!",
+    "selectedRangeSaleText": "Selected Range Sale",
+    "selectedRangeCollectionText": "Selected Range Collection",
+    "selectedRangePatientCountText": "Selected Range Patient Count",
+    "insertExistingText": "Insert Existing",
+    "updateExistingText": "Update Existing",
+    "saveAsNewText": "Save As New",
+    "documentTypeText": "Document Type",
+    "documentTypeSelectionTooltipText": "Select the Document Type from the list. The created or modified content will be saved as the selected document type and can be used accordingly.",
+    "documentTypeEmpty": "Please select a Document Type!",
+    "selectDocumentTypeText": "Select Document Type",
+    "documentNameText": "Document Name",
+    "documentNameTooltipText": "Enter a name for this document. This name will appear in the document format selection list.",
+    "documentNameEmpty": "Please enter a Document Name!"
 }

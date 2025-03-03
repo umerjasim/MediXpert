@@ -479,5 +479,18 @@
     "clickToStartText": "ആരംഭിക്കാൻ ക്ലിക്കുചെയ്യുക...",
     "selectPageSizeText": "പേജ് വലിപ്പം തിരഞ്ഞെടുക്കുക",
     "selectOrientationText": "ഓറിയന്റേഷൻ തിരഞ്ഞെടുക്കുക",
-    "contentEmpty": "ഉള്ളടക്കം ശൂന്യമായിരിക്കരുത്!"
+    "contentEmpty": "ഉള്ളടക്കം ശൂന്യമായിരിക്കരുത്!",
+    "selectedRangeSaleText": "തിരഞ്ഞെടുത്ത പരിധിയിലെ വിൽപ്പന",
+    "selectedRangeCollectionText": "തിരഞ്ഞെടുത്ത പരിധിയിലെ ശേഖരം",
+    "selectedRangePatientCountText": "തിരഞ്ഞെടുത്ത പരിധിയിലെ രോഗികളുടെ എണ്ണം",
+    "insertExistingText": "നിലവിലുള്ളത് ചേർക്കുക",
+    "updateExistingText": "നിലവിലുള്ളത് തിരുത്തുക",
+    "saveAsNewText": "പുതിയതായി സേവ് ചെയ്യുക",
+    "documentTypeText": "ഡോക്യുമെൻ്റ് തരം",
+    "documentTypeSelectionTooltipText": "ലിസ്റ്റിൽ നിന്ന് ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുക്കുക. പുതുതായി സൃഷ്ടിച്ച അല്ലെങ്കിൽ പരിഷ്കരിച്ച ഉള്ളടക്കം തിരഞ്ഞെടുക്കുന്ന ഡോക്യുമെൻ്റ് തരം ആയി സേവ് ചെയ്യപ്പെടും, അതനുസരിച്ച് ഉപയോഗിക്കാം.",
+    "documentTypeEmpty": "ദയവായി ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുക്കുക!",
+    "selectDocumentTypeText": "ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുക്കുക",
+    "documentNameText": "ഡോക്യുമെൻ്റ് പേര്",
+    "documentNameTooltipText": "ഈ ഡോക്യൂമെന്റിന് ഒരു പേര് നൽകുക. ഈ പേര് ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുപ്പ് പട്ടികയിൽ കാണാം.",
+    "documentNameEmpty": "ദയവായി ഡോക്യുമെൻ്റ് പേര് നൽകുക!"
 }

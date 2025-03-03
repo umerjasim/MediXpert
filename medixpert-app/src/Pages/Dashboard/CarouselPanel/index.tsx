@@ -169,13 +169,13 @@ const CarouselPanel: React.FC<{
                 ]}
             >
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
                                     <Tooltip title={
                                         presetDateRange === 'Today' ?
-                                        t('todaySaleText')
+                                            t('todaySaleText')
                                         : presetDateRange === 'Yesterday' ?
                                             t('yesterdaySaleText')
                                         : presetDateRange === 'This Week' ?
@@ -191,7 +191,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysSaleText')
                                         :
-                                            t('todaySaleText')
+                                            t('selectedRangeSaleText')
                                     }>
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             { presetDateRange === 'Today' ?
@@ -211,7 +211,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysSaleText')
                                             :
-                                                t('todaySaleText')
+                                                t('selectedRangeSaleText')
                                             }
                                         </div>
                                     </Tooltip>
@@ -256,7 +256,7 @@ const CarouselPanel: React.FC<{
                     </Card>
                 </div>
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
@@ -278,7 +278,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysSaleText')
                                         :
-                                            t('todaySaleText')
+                                            t('selectedRangeSaleText')
                                     }>
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             { presetDateRange === 'Today' ?
@@ -298,7 +298,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysSaleText')
                                             :
-                                                t('todaySaleText')
+                                                t('selectedRangeSaleText')
                                             }
                                         </div>
                                     </Tooltip>
@@ -343,13 +343,13 @@ const CarouselPanel: React.FC<{
                     </Card>
                 </div>
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
                                     <Tooltip title={
                                         presetDateRange === 'Today' ?
-                                        t('todayCollectionText')
+                                            t('todayCollectionText')
                                         : presetDateRange === 'Yesterday' ?
                                             t('yesterdayCollectionText')
                                         : presetDateRange === 'This Week' ?
@@ -365,7 +365,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysCollectionText')
                                         :
-                                            t('todayCollectionText')
+                                            t('selectedRangeCollectionText')
                                     }>
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             { presetDateRange === 'Today' ?
@@ -385,7 +385,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysCollectionText')
                                             :
-                                                t('todayCollectionText')
+                                                t('selectedRangeCollectionText')
                                             }
                                         </div>
                                     </Tooltip>
@@ -430,13 +430,13 @@ const CarouselPanel: React.FC<{
                     </Card>
                 </div>
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
                                     <Tooltip title={
                                         presetDateRange === 'Today' ?
-                                        t('todayCollectionText')
+                                            t('todayCollectionText')
                                         : presetDateRange === 'Yesterday' ?
                                             t('yesterdayCollectionText')
                                         : presetDateRange === 'This Week' ?
@@ -452,7 +452,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysCollectionText')
                                         :
-                                            t('todayCollectionText')
+                                            t('selectedRangeCollectionText')
                                     }>
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             { presetDateRange === 'Today' ?
@@ -472,7 +472,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysCollectionText')
                                             :
-                                                t('todayCollectionText')
+                                                t('selectedRangeCollectionText')
                                             }
                                         </div>
                                     </Tooltip>
@@ -517,13 +517,13 @@ const CarouselPanel: React.FC<{
                     </Card>
                 </div>
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
                                     <Tooltip title={
                                         presetDateRange === 'Today' ?
-                                        t('todayPatientCountText')
+                                            t('todayPatientCountText')
                                         : presetDateRange === 'Yesterday' ?
                                             t('yesterdayPatientCountText')
                                         : presetDateRange === 'This Week' ?
@@ -539,7 +539,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysPatientCountText')
                                         :
-                                            t('todayPatientCountText')
+                                            t('selectedRangePatientCountText')
                                         }
                                     >
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
@@ -560,7 +560,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysPatientCountText')
                                             :
-                                                t('todayPatientCountText')
+                                                t('selectedRangePatientCountText')
                                             }
                                         </div>
                                     </Tooltip>
@@ -604,7 +604,7 @@ const CarouselPanel: React.FC<{
                     </Card>
                 </div>
                 <div className="dashboard-card">
-                    <Card bordered={false} className="responsive-card">
+                    <Card className="responsive-card">
                         <div>
                             <Row align="middle" gutter={[24, 0]}>
                                 <Col xs={18}>
@@ -626,7 +626,7 @@ const CarouselPanel: React.FC<{
                                         : presetDateRange === 'Last 90 Days' ?
                                             t('last90DaysPatientCountText')
                                         :
-                                            t('todayPatientCountText')
+                                            t('selectedRangePatientCountText')
                                     }>
                                         <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             { presetDateRange === 'Today' ?
@@ -646,7 +646,7 @@ const CarouselPanel: React.FC<{
                                             : presetDateRange === 'Last 90 Days' ?
                                                 t('last90DaysPatientCountText')
                                             :
-                                                t('todayPatientCountText')
+                                                t('selectedRangePatientCountText')
                                             }
                                         </div>
                                     </Tooltip>

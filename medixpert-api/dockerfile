@@ -1,23 +1,29 @@
 # Use official Node.js image
 FROM node:18-alpine
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy only package.json and lock file first (for better caching)
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --frozen-lockfile
 
-# Remove any existing build
+# Remove old build if it exists
 RUN rm -rf dist/
 
 # Copy the rest of the project files (excluding dist)
 COPY . .
 
+# Ensure `dist/` exists
+RUN mkdir -p dist
+
 # Compile TypeScript
-RUN npm run build  # This compiles TypeScript
+RUN npm run build
+
+# Verify that the build is successful
+RUN ls -l dist/
 
 # Expose port
 EXPOSE 8500

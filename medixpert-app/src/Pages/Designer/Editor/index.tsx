@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { inject, observer } from 'mobx-react';
 import globalStore from '../../../Store/globalStore';
-import { Alert, Button, Card, Col, Dropdown, Form, Input, MenuProps, Row, Select, Space, Tooltip } from 'antd';
+import { Alert, Button, Card, Col, Dropdown, Form, Input, MenuProps, Row, Select, Space, Spin, Tooltip } from 'antd';
 import { t } from 'i18next';
 import Utility from '../../../Global/Utility';
 import { DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
@@ -19,9 +19,11 @@ const EditorBox: React.FC<{
 }> = ({ pageSizes, hashtags, documentTypes, documentMaster }) => {
     const [pageSettingForm] = Form.useForm();
     const [confirmForm] = Form.useForm();
+    const [editorSaveForm] = Form.useForm();
     const [editorContent, setEditorContent] = useState<string>('');
     const [editorKey, setEditorKey] = useState<string>(Date.now().toString());
     const [editorInstance, setEditorInstance] = useState<any>(null);
+    const [isEditorLoading, setIsEditorLoading] = useState<boolean>(true);
     const [selectedPageSizes,  setSelectedPageSizes] = useState<{ 
         id: string;
         width: {
@@ -64,6 +66,9 @@ const EditorBox: React.FC<{
                 setEditorSize(width, height);
             }
         }, 200);
+        setTimeout(()=> {
+            setIsEditorLoading(false);
+        }, 500);
     }, [globalStore.darkTheme]);
 
     useEffect(() => {
@@ -190,7 +195,17 @@ const EditorBox: React.FC<{
                             const marginLeft = (document.getElementById('marginLeft') as HTMLInputElement)?.value || '10';
                             const marginRight = (document.getElementById('marginRight') as HTMLInputElement)?.value || '10';
 
-                            editorInstance.insertContent(`<div id="margin" style="margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px; border: 1px solid #d3d3d3"><div>`);
+                            const existingContent = editorInstance.getContent();
+
+                            const wrappedContent = `
+                                <div id="margin" style="margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px; border: 0.5px dashed #d3d3d3">
+                                    ${existingContent || "<p>Type here...</p>"}
+                                </div>
+                            `;
+
+                            editorInstance.setContent(wrappedContent);
+
+                            // editorInstance.insertContent(`<div id="margin" style="margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px; border: 1px solid #d3d3d3">${existingContent}<div>`);
                     
                             api.close();
                         }
@@ -304,10 +319,12 @@ const EditorBox: React.FC<{
                 }
             });
 
-            const brandBar = document.querySelector('.tox-statusbar__branding') as HTMLSpanElement;
-            if (brandBar) {
-                brandBar.style.display = 'none';
-            }
+            setTimeout(() => {
+                const brandBar = document.querySelector('.tox-statusbar__branding') as HTMLSpanElement;
+                if (brandBar) {
+                    brandBar.style.display = 'none';
+                }
+            }, 100);
 
             const attachListeners = () => {
                 if (!editorInstance.current) return;
@@ -317,6 +334,7 @@ const EditorBox: React.FC<{
                 const editorBody = editorDoc?.body;
           
                 if (editorBody) {
+                    console.log(11)
                     // if (editorDisabled) {
                     //     editorBody.innerHTML = `
                     //         <div style="
@@ -392,6 +410,47 @@ const EditorBox: React.FC<{
                 }, 500);
                 return () => clearInterval(checkEditorReady);
             }
+            
+            let isHeightExceeded = false;
+            editorInstance.on('input', () => {
+                const editorIframe = document.querySelector('.tox-edit-area iframe') as HTMLIFrameElement;
+
+                if (editorIframe) {
+                    const editorDoc = editorIframe.contentDocument || editorIframe.contentWindow?.document;
+                    if (editorDoc) {
+                        const body = editorDoc.body;
+                        if (body) {
+                            const contentHeight = body.scrollHeight;
+                            
+                            let maxHeight = selectedPageSizes?.height.value || 0;
+                            const unit = selectedPageSizes?.height.unit || 'px';
+
+                            if (unit === 'mm') {
+                                maxHeight = maxHeight * 3.78;
+                            } else if (unit === 'in') {
+                                maxHeight = maxHeight * 96;
+                            } else if (unit === 'px') {
+                            } else {
+                                console.warn(`Unsupported unit: ${unit}`);
+                                return;
+                            }
+
+                            if (contentHeight > maxHeight) {
+                                if (!isHeightExceeded) {
+                                    alert(`Content height cannot exceed ${selectedPageSizes?.height.value}${unit}`);
+                                    isHeightExceeded = true;
+                                }
+
+                                while (body.scrollHeight > maxHeight && body.lastChild) {
+                                    body.removeChild(body.lastChild);
+                                }
+                            } else {
+                                isHeightExceeded = false;
+                            }
+                        }
+                    }
+                }
+            }); 
         }
     }, [editorInstance, editorDisabled]);
 
@@ -564,6 +623,7 @@ const EditorBox: React.FC<{
         } else {
             setEditorSize(width, height);
         }
+        setEditorDisabled(false);
         setSaveButtonProp((prev: any) => ({...prev, disable: false}));
     };
 
@@ -761,7 +821,7 @@ const EditorBox: React.FC<{
                             <Dropdown menu={{ items: docMasterItems }} trigger={['click']}>
                                 <Button block>
                                     <Space>
-                                        {t('insertSavedText')}
+                                        {t('insertExistingText')}
                                         <DownOutlined />
                                     </Space>
                                 </Button>
@@ -780,77 +840,100 @@ const EditorBox: React.FC<{
                     style={{ marginBottom: 10 }} 
                     />
                 )}
-                <Editor
-                    disabled={editorDisabled}
-                    key={editorKey}
-                    apiKey="9fg7gvc2kv1t15p7gaxb1n6aoop605h5kkw2l0joprhge3v9"
-                    value={editorContent}
-                    onEditorChange={handleEditorChange}
-                    onInit={(evt, editor) => {
-                        editorInstance.current = editor;
-                    }}
-                    init={{
-                        script_url: '/TinyMCE/tinymce.min.js',
-                        // disabled: true,
-                        disable: 'tracking',
-                        height: 500,
-                        // menubar: 'file edit view insert format tools table pagebreak help',
-                        menubar: false,
-                        plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-                        toolbar: 'hashtags | undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor removeformat | align numlist bullist | link image table media | lineheight outdent indent | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl | addLine | setMargins',
-                        autosave_ask_before_unload: true,
-                        autosave_interval: '30s',
-                        autosave_prefix: '{path}{query}-{id}-',
-                        autosave_restore_when_empty: false,
-                        autosave_retention: '2m',
-                        image_advtab: true,
-                        image_list: [
-                            { title: 'My page 1', value: 'https://www.tiny.cloud' },
-                            { title: 'My page 2', value: 'http://www.moxiecode.com' },
-                        ],
-                        importcss_append: true,
-                        file_picker_callback: (callback, value, meta) => {
-                            if (meta.filetype === 'file') {
-                                callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
-                            }
-                            if (meta.filetype === 'image') {
-                                callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
-                            }
-                            if (meta.filetype === 'media') {
-                                callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
-                            }
-                        },
-                        skin: globalStore.darkTheme ? 'oxide-dark' : 'oxide',
-                        content_css: globalStore.darkTheme ? 'dark' : 'default',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                        setup: (editor) => {
-                            setEditorInstance(editor);
-                        },
-                        placeholder: t('clickToStartText')
-                    }}
-                />
-                <Form.Item
-                    id="editor-save"
-                    name="editor-save"
-                    style={{ marginBottom: 0 }}
-                    validateStatus={saveButtonProp.error ? "error" : ""}
-                    help={saveButtonProp.error ? t('contentEmpty') : ""}
+                {!isEditorLoading && (
+                    <Editor
+                        disabled={editorDisabled}
+                        key={editorKey}
+                        apiKey="9fg7gvc2kv1t15p7gaxb1n6aoop605h5kkw2l0joprhge3v9"
+                        value={editorContent}
+                        onEditorChange={handleEditorChange}
+                        onInit={(evt, editor) => {
+                            editorInstance.current = editor;
+                        }}
+                        init={{
+                            script_url: '/TinyMCE/tinymce.min.js',
+                            // disabled: true,
+                            disable: 'tracking',
+                            height: 500,
+                            // menubar: 'file edit view insert format tools table pagebreak help',
+                            menubar: false,
+                            plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+                            toolbar: 'hashtags | undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor removeformat | align numlist bullist | link image table media | lineheight outdent indent | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl | addLine | setMargins',
+                            autosave_ask_before_unload: true,
+                            autosave_interval: '30s',
+                            autosave_prefix: '{path}{query}-{id}-',
+                            autosave_restore_when_empty: false,
+                            autosave_retention: '2m',
+                            image_advtab: true,
+                            image_list: [
+                                { title: 'My page 1', value: 'https://www.tiny.cloud' },
+                                { title: 'My page 2', value: 'http://www.moxiecode.com' },
+                            ],
+                            importcss_append: true,
+                            file_picker_callback: (callback, value, meta) => {
+                                if (meta.filetype === 'file') {
+                                    callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+                                }
+                                if (meta.filetype === 'image') {
+                                    callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+                                }
+                                if (meta.filetype === 'media') {
+                                    callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+                                }
+                            },
+                            skin: globalStore.darkTheme ? 'oxide-dark' : 'oxide',
+                            content_css: globalStore.darkTheme ? 'dark' : 'default',
+                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                            setup: (editor) => {
+                                setEditorInstance(editor);
+                            },
+                            placeholder: t('clickToStartText')
+                        }}
+                    />
+                )}
+                <Form
+                    form={editorSaveForm}
+                    name='form-editor-save'
+                    id='form-editor-save'
+                    initialValues={{ remember: true }}
+                    autoComplete="off"
+                    onKeyDown={(event) => Utility.handleEnterKey(event, 'form-editor-save')}
                 >
-                    <Row style={{ marginTop: 10 }} gutter={24}>  
-                        {selectedContentId ? (
-                            <>
-                                <Col lg={12} md={12} sm={12} xs={12}>
-                                    <Button 
-                                    color="primary" 
-                                    variant="dashed"
-                                    block
-                                    onClick={handleUpdate}
-                                    disabled={saveButtonProp.disable}
-                                    >
-                                        {t('updateExistingText')}
-                                    </Button>
-                                </Col>
-                                <Col lg={12} md={12} sm={12} xs={12}>
+                    <Form.Item
+                        id="editor-save"
+                        name="editor-save"
+                        style={{ marginBottom: 0 }}
+                        validateStatus={saveButtonProp.error ? "error" : ""}
+                        help={saveButtonProp.error ? t('contentEmpty') : ""}
+                    >
+                        <Row style={{ marginTop: 10 }} gutter={24}>  
+                            {selectedContentId ? (
+                                <>
+                                    <Col lg={12} md={12} sm={12} xs={12}>
+                                        <Button 
+                                        color="primary" 
+                                        variant="dashed"
+                                        block
+                                        onClick={handleUpdate}
+                                        disabled={saveButtonProp.disable}
+                                        >
+                                            {t('updateExistingText')}
+                                        </Button>
+                                    </Col>
+                                    <Col lg={12} md={12} sm={12} xs={12}>
+                                        <Button 
+                                        color="primary" 
+                                        variant="solid"
+                                        block
+                                        onClick={handleSave}
+                                        disabled={saveButtonProp.disable}
+                                        >
+                                            {t('saveAsNewText')}
+                                        </Button>
+                                    </Col>
+                                </>
+                            ) : (
+                                <Col lg={24} md={24} sm={24} xs={24}>
                                     <Button 
                                     color="primary" 
                                     variant="solid"
@@ -858,25 +941,13 @@ const EditorBox: React.FC<{
                                     onClick={handleSave}
                                     disabled={saveButtonProp.disable}
                                     >
-                                        {t('saveAsNewText')}
+                                        {t('saveText')}
                                     </Button>
                                 </Col>
-                            </>
-                        ) : (
-                            <Col lg={24} md={24} sm={24} xs={24}>
-                                <Button 
-                                color="primary" 
-                                variant="solid"
-                                block
-                                onClick={handleSave}
-                                disabled={saveButtonProp.disable}
-                                >
-                                    {t('saveText')}
-                                </Button>
-                            </Col>
-                        )}
-                    </Row>
-                </Form.Item>
+                            )}
+                        </Row>
+                    </Form.Item>
+                </Form>
             </Card>
         </div>
     );
