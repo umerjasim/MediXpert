@@ -19,8 +19,8 @@ RUN yarn build
 # Install `serve` globally to serve the production build
 RUN yarn global add serve
 
-# Expose the port Render will use
+# Expose the port (Render will use $PORT)
 EXPOSE 10000
 
-# Serve the built frontend using `serve`
-CMD ["serve", "-s", "build", "-l", "10000"]
+# Start the app using the Render-assigned PORT dynamically
+CMD ["sh", "-c", "serve -s build -l ${PORT:-10000}"]
