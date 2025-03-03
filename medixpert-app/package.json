@@ -77,7 +77,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "HOST=0.0.0.0 PORT=4000 craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
