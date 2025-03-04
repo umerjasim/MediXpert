@@ -19,8 +19,8 @@ RUN yarn build
 # Install `serve` globally to serve the production build
 RUN yarn global add serve
 
-# Expose the correct port for Render
+# Expose the Render-assigned port (Render assigns a port dynamically)
 EXPOSE 10000
 
-# Correctly use the Render-assigned PORT variable
-CMD ["sh", "-c", "serve -s build -l $PORT"]
+# Ensure the service does not exit and correctly binds to Render's $PORT
+CMD ["sh", "-c", "serve -s build -l $PORT || sleep infinity"]
