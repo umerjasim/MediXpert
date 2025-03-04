@@ -10,14 +10,33 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
-
+import { precacheAndRoute } from 'workbox-precaching';
+import { clientsClaim } from 'workbox-core';
 
 // Declare the global `self` variable to avoid TypeScript errors
 declare var self: ServiceWorkerGlobalScope & {
   __WB_MANIFEST: Array<{ url: string; revision: string | null }>;
 };
 
+// Let Workbox handle __WB_MANIFEST automatically
+clientsClaim();
 
+// Workbox will inject __WB_MANIFEST during the build process
+if (Array.isArray(self.__WB_MANIFEST) || process.env.REACT_APP_NODE_ENV === 'production') {
+  precacheAndRoute(self.__WB_MANIFEST);
+}
+
+// Example runtime caching rule
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request);
+    })
+  );
+});
 
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||

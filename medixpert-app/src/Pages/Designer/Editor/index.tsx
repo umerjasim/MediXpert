@@ -435,6 +435,9 @@ const EditorBox: React.FC<{
                                 return;
                             }
 
+                            console.log('maxHeight', maxHeight)
+                            console.log('contentHeight', contentHeight)
+
                             if (contentHeight > maxHeight) {
                                 if (!isHeightExceeded) {
                                     alert(`Content height cannot exceed ${selectedPageSizes?.height.value}${unit}`);
