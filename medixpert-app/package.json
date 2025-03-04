@@ -77,8 +77,8 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "serve -s build -l $PORT --no-cache",
-    "build": "CI=false craco build",
+    "start": "craco start",
+    "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
   },
