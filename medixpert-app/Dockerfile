@@ -22,5 +22,5 @@ RUN yarn global add serve
 # Expose the Render-assigned port (Render assigns a port dynamically)
 EXPOSE 10000
 
-# Ensure the service does not exit and correctly binds to Render's $PORT
-CMD ["sh", "-c", "serve -s build -l $PORT || sleep infinity"]
+# Ensure the service correctly serves the built React app
+CMD ["sh", "-c", "serve -s /app/build -l $PORT"]
