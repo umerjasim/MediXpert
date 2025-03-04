@@ -19,8 +19,8 @@ RUN yarn build
 # Install `serve` globally to serve the production build
 RUN yarn global add serve
 
-# Expose the Render-assigned port
+# Expose the correct port for Render
 EXPOSE 10000
 
-# Start the app using the correct port
-CMD ["sh", "-c", "serve -s build -l ${PORT:-10000}"]
+# Correctly use the Render-assigned PORT variable
+CMD ["sh", "-c", "serve -s build -l $PORT"]
