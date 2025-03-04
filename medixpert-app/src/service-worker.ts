@@ -23,7 +23,7 @@ clientsClaim();
 
 // Workbox will inject __WB_MANIFEST during the build process
 // if (Array.isArray(self.__WB_MANIFEST)) {
-  precacheAndRoute(self.__WB_MANIFEST);
+  // precacheAndRoute(self.__WB_MANIFEST);
 // } else {
 //   console.error("Error: __WB_MANIFEST is not an array");
 // }
