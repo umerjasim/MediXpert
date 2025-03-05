@@ -22,8 +22,17 @@ declare var self: ServiceWorkerGlobalScope & {
 clientsClaim();
 
 // Workbox will inject __WB_MANIFEST during the build process
-if (Array.isArray(self.__WB_MANIFEST) || process.env.REACT_APP_NODE_ENV === 'production') {
+// Check for the production environment
+if (process.env.REACT_APP_NODE_ENV === 'production') {
+  // In production, always precache and route the assets
   precacheAndRoute(self.__WB_MANIFEST);
+} else {
+  // In non-production (development), check if __WB_MANIFEST is an array first
+  if (Array.isArray(self.__WB_MANIFEST)) {
+    precacheAndRoute(self.__WB_MANIFEST);
+  } else {
+    console.warn("Warning: __WB_MANIFEST is not an array in non-production environment");
+  }
 }
 
 // Example runtime caching rule
@@ -37,6 +46,7 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+  
 
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
