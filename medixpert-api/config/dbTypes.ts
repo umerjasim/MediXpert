@@ -1108,3 +1108,31 @@ export type DocumentMaster = {
         date: Date | null;
     }
 }
+
+type NotificationActions = {
+    icon: string;
+    label: string;
+    url: string;
+}
+
+//notifications
+export type Notifications = {
+    _id: ObjectId;
+    icon: string;
+    title: string;
+    name: string;
+    actions: NotificationActions[];
+    clear: boolean
+    read: boolean;
+    active: boolean;
+    created: {
+        by: ObjectId | 'system';
+        on: string;
+        date: Date;
+    };
+    modified: {
+        by: ObjectId | null;
+        on: string | null;
+        date: Date | null;
+    }
+}
