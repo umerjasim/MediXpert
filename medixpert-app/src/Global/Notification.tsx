@@ -1,64 +1,37 @@
-import React from 'react';
-import { notification } from 'antd';
+// Global/Notification.tsx
+
+import type { NotificationInstance } from 'antd/es/notification/interface';
 import Constant from './Constant';
 
-function error(params: { description: string, message?: string, duration?: number }) {
-  notification.destroy();
-  const closeIcon = <div></div>
-  notification.error({
-    placement: 'topRight',
-    description: params.description,
-    message: params.message,
-    duration: params.duration ? params.duration : Constant.notificationDuration,
-    // closeIcon: closeIcon,
-    showProgress: true,
-    pauseOnHover: false
-  });
+let apiRef: NotificationInstance | null = null;
+
+export function overrideApi(api: NotificationInstance) {
+  apiRef = api;
 }
 
-function success(params: { description: string, message?: string, duration?: number }) {
-  notification.destroy();
-  const closeIcon = <div></div>
-  notification.success({
-    placement: 'topRight',
+function notify(
+  type: 'error' | 'success' | 'warning' | 'info',
+  params: { description: string; message?: string; duration?: number }
+) {
+  if (!apiRef) return;
+
+  const duration = params.duration ?? Constant.notificationDuration;
+  const config = {
+    placement: 'topRight' as const,
     description: params.description,
     message: params.message,
-    duration: params.duration ? params.duration : Constant.notificationDuration,
-    // closeIcon: closeIcon
+    duration,
     showProgress: true,
-    pauseOnHover: false
-  });
-}
+    pauseOnHover: false,
+  };
 
-function warn(params: { description: string, message?: string, duration?: number }) {
-  notification.destroy();
-  const closeIcon = <div></div>
-  notification.warning({
-    placement: 'topRight',
-    description: params.description,
-    message: params.message,
-    duration: params.duration ? params.duration : Constant.notificationDuration,
-    // closeIcon: closeIcon
-    showProgress: true,
-    pauseOnHover: false
-  });
+  apiRef[type](config);
 }
-
-function info(params: { description: string, message?: string, duration?: number }) {
-  notification.destroy();
-  const closeIcon = <div></div>
-  notification.info({
-    placement: 'topRight',
-    description: params.description,
-    message: params.message,
-    duration: params.duration ? params.duration : Constant.notificationDuration,
-    // closeIcon: closeIcon
-    showProgress: true,
-    pauseOnHover: false
-  });
-}
-
 
 export default {
-  error, success, warn, info
+  error: (params: Parameters<typeof notify>[1]) => notify('error', params),
+  success: (params: Parameters<typeof notify>[1]) => notify('success', params),
+  warn: (params: Parameters<typeof notify>[1]) => notify('warning', params),
+  info: (params: Parameters<typeof notify>[1]) => notify('info', params),
+  overrideApi,
 };

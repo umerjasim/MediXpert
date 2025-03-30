@@ -6,7 +6,7 @@ dotenv.config();
 
 const url = process.env.DB_URL as string;
 let db = process.env.DB_NAME as string | undefined;
-
+console.log(url)
 if (!url) {
     throw new Error('MongoDB connection URI is missing!');
 }

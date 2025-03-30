@@ -158,7 +158,9 @@ const CarouselPanel: React.FC<{
                 slidesToScroll={1}
                 swipeToSlide
                 draggable
+                variableWidth
                 centerMode
+                centerPadding="0px" 
                 responsive={[
                     { breakpoint: 1600, settings: { slidesToShow: 4, centerMode: true } }, // xxl
                     { breakpoint: 1400, settings: { slidesToShow: 3, centerMode: true } }, // xl
@@ -167,6 +169,7 @@ const CarouselPanel: React.FC<{
                     { breakpoint: 768, settings: { slidesToShow: 1, centerMode: true } },  // sm
                     { breakpoint: 576, settings: { slidesToShow: 1, centerMode: true } },  // xs
                 ]}
+                style={{ height: '130px', padding: 0, margin: 0 }}
             >
                 <div className="dashboard-card">
                     <Card className="responsive-card">
@@ -694,4 +697,4 @@ const CarouselPanel: React.FC<{
     );
 };
 
-export default inject('globalStore')(observer(CarouselPanel));
+export default CarouselPanel;

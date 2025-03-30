@@ -12,10 +12,11 @@ const Designer: React.FC = () => {
     const [hashtags, sethashtags] = useState<any[]>([]);
     const [documentTypes, setDocumentTypes] = useState<any[]>([]);
     const [documentMaster, setDocumentMaster] = useState<any[]>([]);
+    const [loadData, setLoadData] = useState<boolean>(false);
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [loadData]);
 
     const getData = async () => {
         globalStore.setLoading(true);
@@ -40,7 +41,13 @@ const Designer: React.FC = () => {
 
     return (
         <div>
-            <Editor pageSizes={pageSizes} hashtags={hashtags} documentTypes={documentTypes} documentMaster={documentMaster} />
+            <Editor 
+            pageSizes={pageSizes} 
+            hashtags={hashtags} 
+            documentTypes={documentTypes} 
+            documentMaster={documentMaster} 
+            setLoadData={setLoadData}
+            />
         </div>
     );
 };

@@ -16,7 +16,8 @@ const EditorBox: React.FC<{
     hashtags: any[];
     documentTypes: any[];
     documentMaster: any[];
-}> = ({ pageSizes, hashtags, documentTypes, documentMaster }) => {
+    setLoadData: (value: boolean) => void;
+}> = ({ pageSizes, hashtags, documentTypes, documentMaster, setLoadData }) => {
     const [pageSettingForm] = Form.useForm();
     const [confirmForm] = Form.useForm();
     const [editorSaveForm] = Form.useForm();
@@ -69,15 +70,21 @@ const EditorBox: React.FC<{
         setTimeout(()=> {
             setIsEditorLoading(false);
         }, 500);
-    }, [globalStore.darkTheme]);
+    }, [globalStore.darkTheme, globalStore.language]);
 
     useEffect(() => {
-        if (editorInstance) {
-            editorInstance.ui.registry.addButton('addLine', {
-                text: 'Add Line',
+        // setTimeout(() => {
+            handleEditor(editorInstance);
+        // }, 500);
+    }, [editorInstance, editorDisabled]);
+
+    function handleEditor (editor: any) {
+        if (editor) {
+            editor.ui.registry.addButton('addLine', {
+                text: t('addLineText'),
                 icon: 'line',
                 onAction: function () {
-                    editorInstance.windowManager.open({
+                    editor.windowManager.open({
                         title: 'Insert Line',
                         body: {
                             type: 'panel',
@@ -135,7 +142,7 @@ const EditorBox: React.FC<{
                                     ? `<div style="border-left: ${thickness}px solid ${color}; height: 100%;></div>`
                                     : `<div style="border-top: ${thickness}px solid ${color}; width: 100%;"></div>`;
                     
-                            editorInstance.insertContent(lineHtml);
+                            editor.insertContent(lineHtml);
                             api.close();
                         },
                         onChange: function (dialogApi: any, details: any) {
@@ -156,11 +163,11 @@ const EditorBox: React.FC<{
                     }, 100);
                 }
             });
-            editorInstance.ui.registry.addButton('setMargins', {
-                text: 'Set Margins',
+            editor.ui.registry.addButton('setMargins', {
+                text: t('setMarginsText'),
                 icon: 'visualblocks',
                 onAction: function () {
-                    editorInstance.windowManager.open({
+                    editor.windowManager.open({
                         title: 'Set Margins',
                         body: {
                             type: 'panel',
@@ -195,7 +202,7 @@ const EditorBox: React.FC<{
                             const marginLeft = (document.getElementById('marginLeft') as HTMLInputElement)?.value || '10';
                             const marginRight = (document.getElementById('marginRight') as HTMLInputElement)?.value || '10';
 
-                            const existingContent = editorInstance.getContent();
+                            const existingContent = editor.getContent();
 
                             const wrappedContent = `
                                 <div id="margin" style="margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px; border: 0.5px dashed #d3d3d3">
@@ -203,7 +210,7 @@ const EditorBox: React.FC<{
                                 </div>
                             `;
 
-                            editorInstance.setContent(wrappedContent);
+                            editor.setContent(wrappedContent);
 
                             // editorInstance.insertContent(`<div id="margin" style="margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px; border: 1px solid #d3d3d3">${existingContent}<div>`);
                     
@@ -212,12 +219,12 @@ const EditorBox: React.FC<{
                     });
                 }
             });
-            editorInstance.ui.registry.addButton('hashtags', {
+            editor.ui.registry.addButton('hashtags', {
                 text: '#',
                 // icon: 'line',
                 onAction: function () {
-                    editorInstance.windowManager.open({
-                        title: 'Insert Line',
+                    editor.windowManager.open({
+                        title: t('insertHashtagText'),
                         body: {
                             type: 'panel',
                             items: [
@@ -308,8 +315,8 @@ const EditorBox: React.FC<{
                                     const hashtagId = hashtagItem.getAttribute("data-id");
                         
                                     if (hashtagName && hashtagId) {
-                                        editorInstance.insertContent(`${hashtagName} `);
-                                        editorInstance.windowManager.close();
+                                        editor.insertContent(`${hashtagName} `);
+                                        editor.windowManager.close();
                                     }
                                 }
                             });
@@ -327,9 +334,9 @@ const EditorBox: React.FC<{
             }, 100);
 
             const attachListeners = () => {
-                if (!editorInstance.current) return;
+                if (!editor.current) return;
 
-                const editorIframe = editorInstance.current.iframeElement;
+                const editorIframe = editor.current.iframeElement;
                 const editorDoc = editorIframe?.contentWindow?.document;
                 const editorBody = editorDoc?.body;
           
@@ -399,11 +406,11 @@ const EditorBox: React.FC<{
                 }
             };
           
-            if (editorInstance.current) {
+            if (editor.current) {
                 attachListeners();
             } else {
                 const checkEditorReady = setInterval(() => {
-                    if (editorInstance.current) {
+                    if (editor.current) {
                         attachListeners();
                         clearInterval(checkEditorReady);
                     }
@@ -412,7 +419,7 @@ const EditorBox: React.FC<{
             }
             
             let isHeightExceeded = false;
-            editorInstance.on('input', () => {
+            editor.on('input', () => {
                 const editorIframe = document.querySelector('.tox-edit-area iframe') as HTMLIFrameElement;
 
                 if (editorIframe) {
@@ -455,7 +462,7 @@ const EditorBox: React.FC<{
                 }
             }); 
         }
-    }, [editorInstance, editorDisabled]);
+    };
 
     function setEditorSize(width: string, height: string) {
         const editorBody = document.querySelector('.tox-editor-container iframe') as HTMLIFrameElement;
@@ -591,6 +598,7 @@ const EditorBox: React.FC<{
                         disable: true,
                         error: false,
                     });
+                    setLoadData(true);
                 }, 500);
             }
         } catch (error) {
@@ -819,11 +827,12 @@ const EditorBox: React.FC<{
                                 </Button>
                             </Form.Item>
                         </Col>
-                        <Col lg={6} md={6} sm={24} xs={24}></Col>
-                        <Col lg={3} md={3} sm={24} xs={24}>
-                            <Dropdown menu={{ items: docMasterItems }} trigger={['click']}>
+                        <Col lg={5} md={5} sm={24} xs={24}></Col>
+                        <Col lg={4} md={4} sm={24} xs={24}>
+                            <Dropdown menu={{ items: docMasterItems }} trigger={['click']} 
+                                disabled={docMasterItems.length === 0}>
                                 <Button block>
-                                    <Space>
+                                    <Space style={{ overflow: 'hidden' }}>
                                         {t('insertExistingText')}
                                         <DownOutlined />
                                     </Space>
@@ -889,6 +898,7 @@ const EditorBox: React.FC<{
                             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
                             setup: (editor) => {
                                 setEditorInstance(editor);
+                                handleEditor(editor);
                             },
                             placeholder: t('clickToStartText')
                         }}

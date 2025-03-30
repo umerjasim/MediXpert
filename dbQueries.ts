@@ -1,4 +1,4 @@
-use MediXpert;
+use MediXpert
 
 const hashtagData = [
     {

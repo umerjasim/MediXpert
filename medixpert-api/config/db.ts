@@ -168,6 +168,50 @@ async function initializeDB() {
     }
     await insertPage(collectionNames?.subPages, pageData);
 
+    pageData = {
+        mainPageId: transactionId,
+        name: 'Sale',
+        title: 'Sale',
+        route: '/sale',
+        icon: 'ShoppingOutlined',
+        active: true,
+        created: {
+            by: 'system',
+            on: new Date().toLocaleString(),
+            date: new Date
+        }
+    }
+    await insertPage(collectionNames?.subPages, pageData);
+
+    pageData = {
+        name: 'Others',
+        title: 'Others',
+        route: '/others',
+        icon: 'HolderOutlined',
+        active: true,
+        created: {
+            by: 'system',
+            on: new Date().toLocaleString(),
+            date: new Date
+        }
+    }
+    const othersId = await insertPage(collectionNames?.mainPages, pageData);
+
+    pageData = {
+        mainPageId: othersId,
+        name: 'Designer',
+        title: 'Designer',
+        route: '/designer',
+        icon: 'MacCommandOutlined',
+        active: true,
+        created: {
+            by: 'system',
+            on: new Date().toLocaleString(),
+            date: new Date
+        }
+    }
+    await insertPage(collectionNames?.subPages, pageData);
+
   } catch (error) {
     console.error('Error initializing pages:', error);
     logger.error(error?.stack);

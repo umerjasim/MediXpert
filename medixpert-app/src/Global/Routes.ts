@@ -9,7 +9,7 @@ const Routes = {
     purchaseEntry: '/transactions/purchase-entry',
     approvePurchaseEntry: '/transactions/approve-purchase-entry',
     sale: '/transactions/sale',
-    designer: '/designer',
+    designer: '/others/designer',
     branches: '/masters/branches'
   };
   

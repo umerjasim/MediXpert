@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Descriptions, Popover, Segmented, Table, TableProps, Tag, Typography } from 'antd';
+import { Card, Descriptions, Empty, Popover, Segmented, Table, TableProps, Tag, Typography } from 'antd';
 import { t } from 'i18next';
 import globalStore from '../../../Store/globalStore';
 import dashboardStore from '../../../Store/dashboardStore';
@@ -222,6 +222,7 @@ const VisitTable: React.FC<{
       title: t('invoiceNoText'),
       dataIndex: 'invoiceNo',
       key: 'invoiceNo',
+      ellipsis: true,
       render(value, record, index) {
         const billNo: string = record.billNo || '';
         const slNo: number = record?.slNo || 1;
@@ -342,7 +343,12 @@ const VisitTable: React.FC<{
     title={
       <div style={{ display: 'flex', justifyContent: "space-between" }}>
         <span>{t('patientDetailsText')}</span>
-        <span>
+      </div>
+    }
+    className='dashboard-visit-table-card'
+    styles={{ body: { paddingTop: 10 } }}
+    >
+        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'end' }}>
           <Segmented 
           options={[
             {
@@ -359,16 +365,20 @@ const VisitTable: React.FC<{
           value={branchOrOutlet}
           onChange={(value)=> handleSegmentChange(value)}
           />
-        </span>
-      </div>
-    }
-    className='dashboard-visit-table-card'
-    >
+        </div>
         <Table 
         columns={columns} 
         dataSource={visitData} 
         rowClassName={getRowClassName}
-        
+        scroll={{ x: 'min-content',  y: 55 * 5 }}
+        locale={{
+          emptyText: (
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={t('noDataText')}
+            />
+          )
+        }}
         />
     </Card>
   );

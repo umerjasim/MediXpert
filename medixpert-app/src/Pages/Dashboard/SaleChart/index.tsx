@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, Col, Card, Segmented, Typography, Empty } from 'antd';
+import { Row, Col, Card, Segmented, Typography, Empty, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { t } from 'i18next';
 import globalStore from '../../../Store/globalStore';
@@ -223,71 +223,147 @@ const SaleChart: React.FC<{
     };
 
     return (
-        <Row gutter={24}>
+        <Row gutter={[24, 10]}>
             <Col lg={12} md={24} sm={24} xs={24}>
                 <Card
                 title={
                     <>
-                        <Title level={5} style={{ marginTop: 10 }}>{currentBranchOutletName.outlet} - {t('outletText')}</Title>
-                        <Text type="secondary">
-                            { presetDateRange === 'Today' ?
-                                t('todayText')
-                            : presetDateRange === 'Yesterday' ?
-                                t('yesterdayText')
-                            : presetDateRange === 'This Week' ?
-                                t('thisWeekText')
-                            : presetDateRange === 'This Month' ?
-                                t('thisMonthText')
-                            : presetDateRange === 'Last 7 Days' ?
-                                t('last7DaysText')
-                            : presetDateRange === 'Last 14 Days' ?
-                                t('last14DaysText')
-                            : presetDateRange === 'Last 30 Days' ?
-                                t('last30DaysText')
-                            : presetDateRange === 'Last 90 Days' ?
-                                t('last90DaysText')
-                            :
-                                t('todayText')
-                            }
-                        </Text>
-                        <Text type='secondary' style={{ fontSize: 10 }}>
-                            {
-                                dateRange && dateRange.length === 2 ?
-                                    ' (' + dayjs(dateRange[0]).format('MMM DD, YYYY') + ' - ' + dayjs(dateRange[1]).format('MMM DD, YYYY') + ')'
-                                : ''
-                            }
-                        </Text>
+                        <Title level={5} style={{ marginTop: 10, marginBottom: 0 }}>
+                            {currentBranchOutletName.outlet} - {t('outletText')}
+                        </Title>
+                        <Space style={{ marginBottom: 10 }}>
+                            <Text type="secondary">
+                                { presetDateRange === 'Today' ?
+                                    t('todayText')
+                                : presetDateRange === 'Yesterday' ?
+                                    t('yesterdayText')
+                                : presetDateRange === 'This Week' ?
+                                    t('thisWeekText')
+                                : presetDateRange === 'This Month' ?
+                                    t('thisMonthText')
+                                : presetDateRange === 'Last 7 Days' ?
+                                    t('last7DaysText')
+                                : presetDateRange === 'Last 14 Days' ?
+                                    t('last14DaysText')
+                                : presetDateRange === 'Last 30 Days' ?
+                                    t('last30DaysText')
+                                : presetDateRange === 'Last 90 Days' ?
+                                    t('last90DaysText')
+                                :
+                                    t('todayText')
+                                }
+                            </Text>
+                            <Text type='secondary' style={{ fontSize: 10 }}>
+                                {
+                                    dateRange && dateRange.length === 2 ?
+                                        ' (' + dayjs(dateRange[0]).format('MMM DD, YYYY') + ' - ' + dayjs(dateRange[1]).format('MMM DD, YYYY') + ')'
+                                    : ''
+                                }
+                            </Text>
+                        </Space>
                     </>
                 }
-                extra={<Segmented<string>
-                    options={[
-                        {
-                            label: t('dailyText'),
-                            value: 'Daily'
-                        },
-                        {
-                            label: t('weeklyText'),
-                            value: 'Weekly'
-                        },
-                        {
-                            label: t('monthlyText'),
-                            value: 'Monthly'
-                        },
-                        {
-                            label: t('quarterlyText'),
-                            value: 'Quarterly'
-                        },
-                        {
-                            label: t('yearlyText'),
-                            value: 'Yearly'
-                        }
-                    ]}
-                    onChange={(value) => {
-                      handleSegmentChange(value, 'outlet');
-                    }}
-                    value={outletSegment}
-                  />}
+                styles={{ body: { paddingTop: 10 } }}
+                // extra={<Segmented<string>
+                //     options={[
+                //         {
+                //             label: t('dailyText'),
+                //             value: 'Daily'
+                //         },
+                //         {
+                //             label: t('weeklyText'),
+                //             value: 'Weekly'
+                //         },
+                //         {
+                //             label: t('monthlyText'),
+                //             value: 'Monthly'
+                //         },
+                //         {
+                //             label: t('quarterlyText'),
+                //             value: 'Quarterly'
+                //         },
+                //         {
+                //             label: t('yearlyText'),
+                //             value: 'Yearly'
+                //         }
+                //     ]}
+                //     onChange={(value) => {
+                //       handleSegmentChange(value, 'outlet');
+                //     }}
+                //     value={outletSegment}
+                //   />}
                 >
+                    <div style={{ overflow: 'auto', scrollbarWidth: 'thin', }}>
+                        <Segmented<string>
+                            disabled={!Utility.hasData(currentOutletWiseSum) && !Utility.hasData(currentOutletWiseCollectionSum)}
+                            options={[
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('dailyText')}
+                                            </div>,
+                                    value: 'Daily'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('weeklyText')}
+                                            </div>,
+                                    value: 'Weekly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('monthlyText')}
+                                            </div>,
+                                    value: 'Monthly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('quarterlyText')}
+                                            </div>,
+                                    value: 'Quarterly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('yearlyText')}
+                                            </div>,
+                                    value: 'Yearly'
+                                }
+                            ]}
+                            onChange={(value) => {
+                            handleSegmentChange(value, 'outlet');
+                            }}
+                            value={outletSegment}
+                        />
+                    </div>
                     {chartType === 'Bar' ? (
                         <>
                             {!Utility.hasData(currentOutletWiseSum) && !Utility.hasData(currentOutletWiseCollectionSum) ?
@@ -328,66 +404,140 @@ const SaleChart: React.FC<{
                 <Card 
                 title={
                     <>
-                        <Title level={5} style={{ marginTop: 10 }}>{currentBranchOutletName.branch} - {t('branchText')}</Title>
-                        <Text type="secondary">
-                            { presetDateRange === 'Today' ?
-                                t('todayText')
-                            : presetDateRange === 'Yesterday' ?
-                                t('yesterdayText')
-                            : presetDateRange === 'This Week' ?
-                                t('thisWeekText')
-                            : presetDateRange === 'This Month' ?
-                                t('thisMonthText')
-                            : presetDateRange === 'Last 7 Days' ?
-                                t('last7DaysText')
-                            : presetDateRange === 'Last 14 Days' ?
-                                t('last14DaysText')
-                            : presetDateRange === 'Last 30 Days' ?
-                                t('last30DaysText')
-                            : presetDateRange === 'Last 90 Days' ?
-                                t('last90DaysText')
-                            :
-                                t('todayText')
-                            }
-                        </Text> 
-                        <Text type='secondary' style={{ fontSize: 10 }}>
-                            {
-                                dateRange && dateRange.length === 2 ?
-                                    ' (' + dayjs(dateRange[0]).format('MMM DD, YYYY') + ' - ' + dayjs(dateRange[1]).format('MMM DD, YYYY') + ')'
-                                : ''
-                            }
-                        </Text>
+                        <Title level={5} style={{ marginTop: 10, marginBottom: 0 }}>{currentBranchOutletName.branch} - {t('branchText')}</Title>
+                        <Space style={{ marginBottom: 10 }}>
+                            <Text type="secondary">
+                                { presetDateRange === 'Today' ?
+                                    t('todayText')
+                                : presetDateRange === 'Yesterday' ?
+                                    t('yesterdayText')
+                                : presetDateRange === 'This Week' ?
+                                    t('thisWeekText')
+                                : presetDateRange === 'This Month' ?
+                                    t('thisMonthText')
+                                : presetDateRange === 'Last 7 Days' ?
+                                    t('last7DaysText')
+                                : presetDateRange === 'Last 14 Days' ?
+                                    t('last14DaysText')
+                                : presetDateRange === 'Last 30 Days' ?
+                                    t('last30DaysText')
+                                : presetDateRange === 'Last 90 Days' ?
+                                    t('last90DaysText')
+                                :
+                                    t('todayText')
+                                }
+                            </Text> 
+                            <Text type='secondary' style={{ fontSize: 10 }}>
+                                {
+                                    dateRange && dateRange.length === 2 ?
+                                        ' (' + dayjs(dateRange[0]).format('MMM DD, YYYY') + ' - ' + dayjs(dateRange[1]).format('MMM DD, YYYY') + ')'
+                                    : ''
+                                }
+                            </Text>
+                        </Space>
                     </>
                 }
-                extra={<Segmented<string>
-                    options={[
-                        {
-                            label: t('dailyText'),
-                            value: 'Daily'
-                        },
-                        {
-                            label: t('weeklyText'),
-                            value: 'Weekly'
-                        },
-                        {
-                            label: t('monthlyText'),
-                            value: 'Monthly'
-                        },
-                        {
-                            label: t('quarterlyText'),
-                            value: 'Quarterly'
-                        },
-                        {
-                            label: t('yearlyText'),
-                            value: 'Yearly'
-                        }
-                    ]}
-                    onChange={(value) => {
-                        handleSegmentChange(value, 'branch');
-                    }}
-                    value={branchSegment}
-                  />}
+                styles={{ body: { paddingTop: 10 } }}
+                // extra={<Segmented<string>
+                //     options={[
+                //         {
+                //             label: t('dailyText'),
+                //             value: 'Daily'
+                //         },
+                //         {
+                //             label: t('weeklyText'),
+                //             value: 'Weekly'
+                //         },
+                //         {
+                //             label: t('monthlyText'),
+                //             value: 'Monthly'
+                //         },
+                //         {
+                //             label: t('quarterlyText'),
+                //             value: 'Quarterly'
+                //         },
+                //         {
+                //             label: t('yearlyText'),
+                //             value: 'Yearly'
+                //         }
+                //     ]}
+                //     onChange={(value) => {
+                //         handleSegmentChange(value, 'branch');
+                //     }}
+                //     value={branchSegment}
+                //   />}
                 >
+                    <div style={{ overflow: 'auto', scrollbarWidth: 'thin' }}>
+                        <Segmented<string>
+                            disabled={!Utility.hasData(currentBranchWiseSum) && !Utility.hasData(currentBranchWiseCollectionSum)}
+                            options={[
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('dailyText')}
+                                            </div>,
+                                    value: 'Daily'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('weeklyText')}
+                                            </div>,
+                                    value: 'Weekly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('monthlyText')}
+                                            </div>,
+                                    value: 'Monthly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('quarterlyText')}
+                                            </div>,
+                                    value: 'Quarterly'
+                                },
+                                {
+                                    label: <div style={{
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                maxWidth: 100,
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                            >
+                                                {t('yearlyText')}
+                                            </div>,
+                                    value: 'Yearly'
+                                }
+                            ]}
+                            onChange={(value) => {
+                                handleSegmentChange(value, 'branch');
+                            }}
+                            value={branchSegment}
+                        />
+                    </div>
                     {chartType === 'Bar' ? (
                         <>
                         {!Utility.hasData(currentBranchWiseSum) && !Utility.hasData(currentBranchWiseCollectionSum) ?

@@ -1,6 +1,7 @@
 {
     "medixpert": "MediXpert",
     "appName": "MediXpert",
+    "versionText": "Version",
     "signInTitle": "Sign in",
     "signInDescription": "Enter your username and password to sign in.",
     "usernameText": "Username",
@@ -492,5 +493,8 @@
     "selectDocumentTypeText": "Select Document Type",
     "documentNameText": "Document Name",
     "documentNameTooltipText": "Enter a name for this document. This name will appear in the document format selection list.",
-    "documentNameEmpty": "Please enter a Document Name!"
+    "documentNameEmpty": "Please enter a Document Name!",
+    "addLineText": "Add Line",
+    "setMarginsText": "Set Margins",
+    "insertHashtagText": "Insert Hashtag"
 }

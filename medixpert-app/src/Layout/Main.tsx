@@ -7,7 +7,8 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, ConfigProvider, Grid, Layout, Menu, Row, theme, Typography } from 'antd';
+import { Breadcrumb, Button, Col, ConfigProvider, Grid, Layout, Menu, Row, theme, 
+  Typography, App as AntdApp, } from 'antd';
 import SideBar from './SideBar';
 import authStore from '../Store/authStore';
 import { useLocation } from 'react-router-dom';
@@ -21,6 +22,7 @@ import { inject, observer } from 'mobx-react';
 import DateTime from '../Components/DateTime';
 import { NavLink } from 'react-router-dom';
 import branchStore from '../Store/branchStore';
+import NotificationProvider from '../Global/NotificationProvider';
 
 const { Header, Sider, Content } = Layout;
 const { Link } = Typography;
@@ -159,108 +161,112 @@ const Main: React.FC<MainProps> = ({ children }) => {
     theme={{
       algorithm: globalStore.darkTheme ? theme.darkAlgorithm : theme.defaultAlgorithm
     }}
-  >
-    <Layout>
-      {screens.lg || screens.md ? (
-        <Sider
-          breakpoint="lg"
-          // collapsedWidth="0"
-          theme={globalStore.darkTheme ? 'dark' : 'light'}
-          onBreakpoint={(broken) => {
-            console.log('broken');
-          }}
-          onCollapse={(collapsed, type) => {
-            setCollapsed(collapsed);
-          }}
-          style={{ 
-            overflow: 'auto', 
-            background: globalStore.darkTheme ? undefined : '#fff'
-          }}
-          collapsible 
-          collapsed={collapsed}
-          width={260}
-        >
-          <SideBar
-            accessPages={accessPages}
-            color=''
-            loading
-            collapse={collapsed}
-            setCollapse={setCollapsed}
-          />
-        </Sider>
-      ) : (
-        <SideBar
-          accessPages={accessPages}
-          color=''
-          loading
-          collapse={collapsed}
-          setCollapse={setCollapsed}
-        />
-      )}
-      <Layout>
-        <Header 
-        style={{ 
-          padding: 0,
-          background: globalStore.darkTheme ? undefined : '#fff',
-        }}
-        >
-          <HeaderBar 
-          collapse={collapsed}
-          handleCollapse={handleCollapse}
-          name={joinedPath}
-          subName={pageTitle}
-          />
-        </Header>
-        <Content
-          style={{
-            // margin: '8px 16px 24px 16px',
-            padding: '2px 12px 12px 12px',
-            minHeight: 'calc(100vh - 66px)',
-            height: 'calc(100vh - 66px)',
-            overflowY: 'auto',
-            // background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        > 
-          <div style={{
-            margin: '8px 16px 24px 16px'
-          }}
-          >
-            <Row gutter={0} style={{ marginBottom: 10 }}>
-              <Col lg={16}>
-                <div style={{ textTransform: "capitalize", fontSize: 18, fontWeight: 600 }}>
-                  {pageTitle.replace("/", "")}
-                </div>
-                <Breadcrumb
-                  items={[
-                      {
-                          title: (
-                              <Link href='/dashboard' style={{ cursor: 'pointer' }}>
-                                  <HomeOutlined />
-                              </Link>
-                          ),
-                      },
-                      ...pathname
-                          .split('/')
-                          .filter(segment => segment)
-                          .map(part => ({
-                              title: part
-                                  .split('-')
-                                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                                  .join(' '),
-                          })),
-                  ]}
+    >
+        <AntdApp>
+          <NotificationProvider>
+            <Layout>
+              {screens.lg || screens.md ? (
+                <Sider
+                  breakpoint="lg"
+                  // collapsedWidth="0"
+                  theme={globalStore.darkTheme ? 'dark' : 'light'}
+                  onBreakpoint={(broken) => {
+                    console.log('broken');
+                  }}
+                  onCollapse={(collapsed, type) => {
+                    setCollapsed(collapsed);
+                  }}
+                  style={{ 
+                    overflow: 'auto', 
+                    background: globalStore.darkTheme ? undefined : '#fff'
+                  }}
+                  collapsible 
+                  collapsed={collapsed}
+                  width={260}
+                >
+                  <SideBar
+                    accessPages={accessPages}
+                    color=''
+                    loading
+                    collapse={collapsed}
+                    setCollapse={setCollapsed}
+                  />
+                </Sider>
+              ) : (
+                <SideBar
+                  accessPages={accessPages}
+                  color=''
+                  loading
+                  collapse={collapsed}
+                  setCollapse={setCollapsed}
                 />
-              </Col>
-              <Col lg={8}>
-                <DateTime />
-              </Col>
-            </Row>
-            {children}
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+              )}
+              <Layout>
+                <Header 
+                style={{ 
+                  padding: 0,
+                  background: globalStore.darkTheme ? undefined : '#fff',
+                }}
+                >
+                  <HeaderBar 
+                  collapse={collapsed}
+                  handleCollapse={handleCollapse}
+                  name={joinedPath}
+                  subName={pageTitle}
+                  />
+                </Header>
+                <Content
+                  style={{
+                    // margin: '8px 16px 24px 16px',
+                    padding: '2px 12px 12px 12px',
+                    minHeight: 'calc(100vh - 66px)',
+                    height: 'calc(100vh - 66px)',
+                    overflowY: 'auto',
+                    // background: colorBgContainer,
+                    borderRadius: borderRadiusLG,
+                  }}
+                > 
+                  <div style={{
+                    margin: '8px 16px 24px 16px'
+                  }}
+                  >
+                    <Row gutter={0} style={{ marginBottom: 10 }}>
+                      <Col lg={16}>
+                        <div style={{ textTransform: "capitalize", fontSize: 18, fontWeight: 600 }}>
+                          {pageTitle.replace("/", "")}
+                        </div>
+                        <Breadcrumb
+                          items={[
+                              {
+                                  title: (
+                                      <Link href='/dashboard' style={{ cursor: 'pointer' }}>
+                                          <HomeOutlined />
+                                      </Link>
+                                  ),
+                              },
+                              ...pathname
+                                  .split('/')
+                                  .filter(segment => segment)
+                                  .map(part => ({
+                                      title: part
+                                          .split('-')
+                                          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                          .join(' '),
+                                  })),
+                          ]}
+                        />
+                      </Col>
+                      <Col lg={8}>
+                        <DateTime />
+                      </Col>
+                    </Row>
+                    {children}
+                  </div>
+                </Content>
+              </Layout>
+            </Layout>
+          </NotificationProvider>
+        </AntdApp>
     </ConfigProvider>
   );
 };

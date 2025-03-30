@@ -82,7 +82,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                   <AccountCircleIcon sx={{ fontSize: '75px', mt: '12px' }} />
                 </MuiAvatar>
               }
-              actions={[<Space><EditOutlined key="edit" />{t('editProfileText')}</Space>]}
+              actions={[<Space className="profile-edit"><EditOutlined key="edit" />{t('editProfileText')}</Space>]}
               >
                 <Meta title={
                   <Text className="subtitle" >
@@ -201,7 +201,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
             </IconButton>
           </div>
           <div>
-            <Dropdown menu={{ items }} trigger={['click']}>
+            <Dropdown menu={{ items }} trigger={['click']} >
               <IconButton>
                 <MuiAvatar src={user?.picture || ''}>
                   <AccountCircleIcon />

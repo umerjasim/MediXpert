@@ -7,10 +7,13 @@ import SettingsPanel from "./SettingsPanel";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Utility from "../../Global/Utility";
+import { useTranslation } from "react-i18next";
+import globalStore from "../../Store/globalStore";
 
 function Dashboard() {
     const { Title, Text } = Typography;
-    
+
+    const { i18n } = useTranslation();
     const [dateRange, setDateRange] = useState<[Date, Date]>(() => {
       const savedSettings = localStorage.getItem("max-dash-setting");
       if (savedSettings) {
@@ -47,6 +50,11 @@ function Dashboard() {
         }
         return 'Bar';
       });
+
+    
+    //   useEffect(() => {
+    //     i18n.changeLanguage(globalStore.language);
+    //   }, [globalStore.language]);
 
     useEffect(() => {
       const existingSettings = localStorage.getItem("max-dash-setting");

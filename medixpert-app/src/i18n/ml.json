@@ -1,6 +1,7 @@
 {
     "medixpert": "മെഡിക്സ്പെർട്ട്",
     "appName": "മെഡിക്സ്പെർട്ട്",
+    "versionText": "വെർഷൻ",
     "signInTitle": "സൈൻ ഇൻ",
     "signInDescription": "സൈൻ ഇൻ ചെയ്യുന്നതിന് നിങ്ങളുടെ യൂസർനെയിമും പാസ്സ്‌വേർഡും നൽകുക.",
     "usernameText": "യൂസർനെയിം",
@@ -492,5 +493,8 @@
     "selectDocumentTypeText": "ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുക്കുക",
     "documentNameText": "ഡോക്യുമെൻ്റ് പേര്",
     "documentNameTooltipText": "ഈ ഡോക്യൂമെന്റിന് ഒരു പേര് നൽകുക. ഈ പേര് ഡോക്യുമെൻ്റ് തരം തിരഞ്ഞെടുപ്പ് പട്ടികയിൽ കാണാം.",
-    "documentNameEmpty": "ദയവായി ഡോക്യുമെൻ്റ് പേര് നൽകുക!"
+    "documentNameEmpty": "ദയവായി ഡോക്യുമെൻ്റ് പേര് നൽകുക!",
+    "addLineText": "ലൈൻ ചേർക്കുക",
+    "setMarginsText": "മാർജിനുകൾ സജ്ജീകരിക്കുക",
+    "insertHashtagText": "ഹാഷ്‌ടാഗ് ചേർക്കുക"
 }

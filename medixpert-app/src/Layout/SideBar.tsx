@@ -127,13 +127,21 @@ const SideBar: React.FC<SideBarProps> = ({
                   />&nbsp;&nbsp;
                 </>
             }
-            <span className={`transition-container ${collapse ? 'hidden' : 'visible'}`} 
-            style={{ 
-              fontSize: '1rem', 
-              fontWeight: '600',
-              color: globalStore.darkTheme ? '#fff' : undefined
+            <span className={`transition-container ${collapse ? 'hidden' : 'visible'}`}>
+              <div style={{ 
+                fontSize: '1rem', 
+                fontWeight: '600',
+                color: globalStore.darkTheme ? '#fff' : undefined
               }}>
-              {t('appName')}
+                {t('appName')}
+              </div>
+              <div style={{
+                fontSize: '0.6rem',
+                marginTop: -2,
+                opacity: 0.7
+              }}>
+                v{process.env.REACT_APP_VERSION}
+              </div>
             </span>
           </div>
         </div>
@@ -152,16 +160,23 @@ const SideBar: React.FC<SideBarProps> = ({
           className='menu-drawer'
           title={
             <>
-              <Avatar 
-                shape="square" 
-                src={<img src={logo} alt="logo" />} 
-                alt="logo" 
-                size='large'
-              />&nbsp;&nbsp;
-              <span
-              style={{ fontSize: '1rem', fontWeight: '600' }}>
-                {t('appName')}
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar 
+                  shape="square" 
+                  src={<img src={logo} alt="logo" />} 
+                  alt="logo" 
+                  size="large"
+                />
+                &nbsp;&nbsp;
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '1rem', fontWeight: '600' }}>
+                    {t('appName')}
+                  </span>
+                  <span style={{ fontSize: '0.6rem', opacity: 0.7 }}>
+                    v{process.env.REACT_APP_VERSION}
+                  </span>
+                </div>
+              </div>
             </>
           }
           placement='left'

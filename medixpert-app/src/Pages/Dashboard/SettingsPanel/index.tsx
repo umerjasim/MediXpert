@@ -111,7 +111,7 @@ const SettingsPanel: React.FC<{
                         borderRadius: "4px 0 0 4px",
                         cursor: "pointer",
                         transition: "right 0.3s ease-in-out",
-                        zIndex: globalStore.settingDrawerOpen ? 100 : 1100,
+                        zIndex: globalStore.settingDrawerOpen ? 100 : 1010,
                         boxShadow: panelOpen ? "none" : "2px 2px 5px rgba(0,0,0,0.3)",
                     }}
                     onClick={() => setPanelOpen(!panelOpen)}

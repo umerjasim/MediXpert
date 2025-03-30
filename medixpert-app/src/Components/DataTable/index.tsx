@@ -787,7 +787,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 }}
                 title={() => (
                     <Row gutter={[16, 8]}>
-                        <Col lg={3} md={4} sm={8} xs={12}>
+                        <Col lg={3} md={4} sm={12} xs={12}>
                             <Button
                                 size={size === 'default' ? undefined : size}
                                 onClick={() => getItems()}
@@ -805,7 +805,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                                 </Tooltip>
                             </Button>
                         </Col>
-                        <Col lg={3} md={5} sm={8} xs={12}>
+                        <Col lg={4} md={5} sm={12} xs={12}>
                             <div>
                                 <Popover
                                 placement="bottom"
@@ -870,7 +870,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                                 </Popover>
                             </div>
                         </Col>
-                        <Col lg={3} md={5} sm={8} xs={12}>
+                        <Col lg={4} md={5} sm={12} xs={12}>
                             <Dropdown menu={exportMenuProps}>
                                 <Button
                                     size={size === 'default' ? undefined : size}
@@ -889,7 +889,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                                 </Button>
                             </Dropdown>
                         </Col>
-                        <Col lg={3} md={3} sm={12} xs={12}>
+                        <Col lg={3} md={4} sm={12} xs={12}>
                             <Button
                                 size={size === 'default' ? undefined : size}
                                 style={{ color: globalStore.darkTheme ? '#fff' : undefined }}
@@ -907,7 +907,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                                 </Tooltip>
                             </Button>
                         </Col>
-                        <Col lg={4} md={5} sm={12} xs={12}>
+                        <Col lg={6} md={6} sm={24} xs={24}>
                             <Segmented
                             options={[
                                 {
@@ -938,7 +938,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                             block
                             />
                         </Col>
-                        <Col lg={4}></Col>
+                        {/* <Col lg={1}></Col> */}
                         <Col lg={4} md={24} sm={24} xs={24}>
                             <div>
                                 <Input 
