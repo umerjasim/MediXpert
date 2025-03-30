@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
 import './i18n';
-import * as serviceWorker from './service-worker';
+// import * as serviceWorker from './service-worker';
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
@@ -17,4 +17,4 @@ root.render(
   </React.StrictMode>
 );
 
-serviceWorker.unregister();
+// serviceWorker.unregister();
