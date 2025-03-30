@@ -1,4 +1,0 @@
-[service]
-name = "medixpert"
-build = "docker build -t medixpert-app ."
-start = "docker run -p 5000:5000 medixpert-app"
