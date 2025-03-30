@@ -4,20 +4,20 @@ FROM node:18
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (to leverage Docker caching)
-COPY package.json package-lock.json ./
+# Copy package.json and yarn.lock first (to leverage Docker caching)
+COPY package.json yarn.lock ./
 
-# Install dependencies using npm
-RUN npm ci
+# Install dependencies
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the project files
 COPY . .
 
-# Build the frontend using npm
-RUN npm run build
+# Build the frontend
+RUN yarn build
 
 # Install `serve` globally to serve the production build
-RUN npm install -g serve
+RUN yarn global add serve
 
 # Expose the Render-assigned port (Render assigns a port dynamically)
 EXPOSE 10000
