@@ -53,3 +53,17 @@ module.exports = {
 //     },
 //   },
 // };
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+
+module.exports = {
+  webpack: {
+    configure: (webpackConfig) => {
+      webpackConfig.plugins.forEach((plugin) => {
+        if (plugin instanceof WorkboxWebpackPlugin.InjectManifest) {
+          plugin.config.additionalManifestEntries = [];
+        }
+      });
+      return webpackConfig;
+    },
+  },
+};
