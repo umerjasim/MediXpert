@@ -1,7 +1,7 @@
 {
-    "inactiveUser": "User not active!",
-    "invalidLogin": "Invalid sign-in credentials.",
-    "unknownError": "Something went wrong. Please try again later.",
-    "noAnyAccess": "User does not have any access. Please contact your manager.",
-    "forbidden": "Permission denied."
+    "inactiveUser": "ഉപയോക്താവ് നിലവിലില്ല!",
+    "invalidLogin": "സൈൻ-ഇൻ വിവരങ്ങൾ അസാധുവാണ്.",
+    "unknownError": "എന്തോ കുഴപ്പം സംഭവിച്ചു. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.",
+    "noAnyAccess": "ഉപയോക്താവിന് ഒന്നിനും അനുമതി ഇല്ല. ദയവായി നിങ്ങളുടെ മാനേജറെ ബന്ധപ്പെടുക.",
+    "forbidden": "അനുമതി നിഷേധിച്ചു."
 }
