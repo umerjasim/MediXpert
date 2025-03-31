@@ -31,7 +31,7 @@ export const msg = {
     message: 'User not active.'
   },
   invalidLogin: {
-    message: 'Invalid sign-in credentials.',
+    message: 'Invalid Sign-In credentials.',
     code: 102
   },
   unknownError: {
